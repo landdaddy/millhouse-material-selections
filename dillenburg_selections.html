@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dillenburg Residence — MILLHOUSE Material Selections</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f5f4f0;color:#1a1a1a;font-size:14px}
+.top{background:#1a1a1a;color:#fff;padding:1.25rem 2rem;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.brand{font-size:10px;letter-spacing:.12em;text-transform:uppercase;opacity:.6;margin-bottom:3px}
+.proj{font-size:18px;font-weight:500}
+.sub{font-size:11px;opacity:.5;margin-top:3px}
+.meta{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}
+.mf{display:flex;flex-direction:column;gap:2px}
+.mf label{font-size:10px;text-transform:uppercase;letter-spacing:.06em;opacity:.6}
+.mf input{font-size:13px;padding:5px 8px;border:1px solid rgba(255,255,255,.3);border-radius:6px;background:rgba(255,255,255,.1);color:#fff;width:150px}
+.mf input::placeholder{color:rgba(255,255,255,.4)}
+.prog-bar{background:#fff;padding:.75rem 2rem;display:flex;align-items:center;gap:12px;border-bottom:1px solid #e0ded8}
+.prog-lbl{font-size:11px;color:#666;white-space:nowrap}
+.prog-track{flex:1;height:4px;background:#e0ded8;border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:#1a1a1a;border-radius:2px;transition:width .3s;width:0%}
+.prog-pct{font-size:11px;color:#666;min-width:28px;text-align:right}
+.tabs{background:#fff;padding:.75rem 2rem;display:flex;gap:5px;flex-wrap:wrap;border-bottom:1px solid #e0ded8;position:sticky;top:0;z-index:10}
+.tab{font-size:11px;padding:4px 11px;border-radius:5px;border:1px solid #d0ced0;background:#fff;cursor:pointer;color:#666;transition:all .15s;display:flex;align-items:center;gap:4px}
+.tab:hover{border-color:#999;color:#1a1a1a}
+.tab.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.tdot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.4;flex-shrink:0}
+.tdot.done{opacity:1;background:#22c55e}
+.main{padding:1.5rem 2rem 3rem;max-width:960px;margin:0 auto}
+.panel{display:none}
+.panel.active{display:block}
+.sec-head{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#888;margin-bottom:1rem;padding-bottom:8px;border-bottom:1px solid #e0ded8}
+.card{background:#fff;border:1px solid #e0ded8;border-radius:10px;padding:1rem 1.25rem;margin-bottom:10px}
+.card.sel{border-color:#86efac;background:#f0fdf4}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px}
+.iname{font-size:13px;font-weight:600;color:#1a1a1a}
+.inote{font-size:11px;color:#777;margin-top:2px;line-height:1.5}
+.badge{font-size:10px;padding:3px 8px;border-radius:4px;white-space:nowrap;font-weight:600;flex-shrink:0}
+.badge.pending{background:#fef9c3;color:#854d0e}
+.badge.selected{background:#dcfce7;color:#166534}
+.badge.na{background:#f1f0ec;color:#666}
+.vendors{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.vc{font-size:10px;padding:2px 8px;border:1px solid #e0ded8;border-radius:4px;background:#f9f8f5;color:#555}
+.vc b{color:#1a1a1a}
+.spec-grid{display:grid;gap:7px;margin-top:8px}
+.sf{display:flex;flex-direction:column;gap:3px}
+.sf label{font-size:10px;color:#777;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.sf input,.sf select,.sf textarea{font-size:12px;padding:5px 8px;border:1px solid #d0ced8;border-radius:5px;background:#f9f8f5;color:#1a1a1a;width:100%;font-family:inherit}
+.sf textarea{resize:vertical;min-height:50px}
+.sf input:focus,.sf textarea:focus{outline:none;border-color:#999;background:#fff}
+.actions{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.btn{font-size:11px;padding:5px 12px;border-radius:5px;border:1px solid #d0ced8;background:#fff;cursor:pointer;color:#1a1a1a;transition:all .15s}
+.btn:hover{background:#f1f0ec}
+.btn.pri{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.btn.pri:hover{background:#333}
+.footer{margin-top:2rem;padding:1.25rem 0;border-top:1px solid #e0ded8;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.footer-note{font-size:11px;color:#888}
+.exp-btn{font-size:12px;padding:7px 16px;border-radius:6px;border:1px solid #d0ced8;background:#fff;cursor:pointer;color:#1a1a1a;font-weight:600}
+.exp-btn:hover{background:#f1f0ec}
+#export-out{display:none;margin-top:1rem;padding:1rem;background:#f1f0ec;border:1px solid #d0ced8;border-radius:6px;font-size:11px;font-family:monospace;white-space:pre-wrap;color:#1a1a1a;max-height:500px;overflow-y:auto}
+@media(max-width:600px){.main{padding:1rem};.tabs{padding:.5rem 1rem};.top{padding:1rem}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div>
+    <div class="brand">MILLHOUSE Custom Homes</div>
+    <div class="proj">Dillenburg Residence — Material Selections</div>
+    <div class="sub">3,417 SF livable · 1st floor 2,830 SF · 2nd floor 587 SF · Pinal County AZ · Permit PER25-08870</div>
+  </div>
+  <div class="meta">
+    <div class="mf"><label>Client</label><input id="f-client" type="text" value="Dillenburg" /></div>
+    <div class="mf"><label>Meeting date</label><input id="f-date" type="date" /></div>
+    <div class="mf"><label>Stage</label><input id="f-stage" type="text" value="Framing" /></div>
+  </div>
+</div>
+
+<div class="prog-bar">
+  <div class="prog-lbl">Selections complete</div>
+  <div class="prog-track"><div class="prog-fill" id="pfill"></div></div>
+  <div class="prog-pct" id="ppct">0%</div>
+</div>
+
+<div class="tabs" id="tabs"></div>
+
+<div class="main">
+  <div id="panels"></div>
+  <div class="footer">
+    <div class="footer-note">Export a plain-text spec sheet for ordering or client records.</div>
+    <button class="exp-btn" onclick="doExport()">↓ Export spec sheet</button>
+  </div>
+  <div id="export-out"></div>
+</div>
+
+<script>
+const D=[
+{id:"exterior",label:"Exterior",items:[
+{id:"ext-brick",name:"Brick veneer — front facade",note:"Per approved elevations: brick veneer front only (ESR-1215). Mortar type S required per plans.",
+ v:[{n:"Boral Bricks",d:"wide availability, good AZ pricing"},{n:"Endicott Brick",d:"premium face brick, wide color range"},{n:"Glen-Gery",d:"architectural brick, strong Southwest palette"}],
+ s:["Brick color/name","Mortar color","Bond pattern (running/stack/herringbone)","Accent soldier course?","SKU / order ref","Notes"]},
+{id:"ext-siding",name:"Hardboard siding — front elevation",note:"Per plans: ICC-ESR-1844 compliant. Vertical exposure. Needs profile, color, trim selection.",
+ v:[{n:"LP SmartSide",d:"ESR-1844 compliant, excellent AZ durability"},{n:"James Hardie",d:"fiber cement, ESR-1844, most popular"},{n:"Nichiha",d:"fiber cement panel, modern look option"}],
+ s:["Profile (lap / board & batten / panel)","Color / paint","Exposure width","Trim color","Notes"]},
+{id:"ext-stucco",name:"Stucco — rear and side elevations",note:"Per plans: Western One Kote ICC ESR-2022 specified. Must use this product or approved equal.",
+ v:[{n:"Western One Kote",d:"specified on plans — use this or approved equal"},{n:"LaHabra Stucco",d:"approved equal, wide color palette"},{n:"Parex",d:"approved equal, excellent finish options"}],
+ s:["Color","Texture (smooth / sand / dash / skip trowel)","Trim color at corners and reveals","Notes"]},
+{id:"ext-roof",name:"Roof — asphalt shingles + flat section",note:"Per plans: ESR-1389 over 15# felt / 1/2\" OSB. 4:12 main pitch, 5:12 entry gable. Modified bitumen on 1/2:12 flat section (ICC-ESR-2018). Class 4 impact shingles strongly recommended for Pinal County.",
+ v:[{n:"GAF Timberline HDZ",d:"#1 installed shingle, strong warranty, AZ dealer network"},{n:"Owens Corning Duration",d:"SureNail tech, excellent wind resistance"},{n:"CertainTeed Landmark",d:"wide color range, premium aesthetics"}],
+ s:["Color / name","Class 4 impact? (recommended for AZ hail)","Warranty (years)","Flat section membrane brand","Ridge cap style","Notes"]},
+{id:"ext-garage",name:"Garage doors — qty 3",note:"Per electrical plan: 3 garage doors (service panel in garage area). Insulation critical for AZ heat. Confirm exact opening sizes from framing.",
+ v:[{n:"Clopay Canyon Ridge",d:"carriage style, high R-value, best AZ fit"},{n:"Wayne Dalton 9100",d:"insulated steel, strong local dealer"},{n:"Amarr Classica",d:"composite carriage house, good value"}],
+ s:["Style","Width × Height (each door)","R-value (R-18 minimum for AZ)","Color / finish","Hardware finish","Motor brand","Qty: 3","Notes"]},
+{id:"ext-entry",name:"Front entry door",note:"Per security specs on plans: solid core or metal skin required. 1\" deadbolt, 180° viewer required.",
+ v:[{n:"Simpson Door",d:"solid wood, wide profiles, US-made"},{n:"Therma-Tru",d:"fiberglass, excellent AZ heat performance"},{n:"Marvin",d:"wood / clad, if tall or custom size needed"}],
+ s:["Material","Size (width × height)","Style / profile","Exterior color","Hardware finish","Sidelites?","Notes"]},
+{id:"ext-windows",name:"Windows — whole home",note:"Per energy notes: SHGC ≤ 0.25, U-factor ≤ 0.40 required. Plan shows many sizes: 3060SH, 8060TS, 6080, 6060LS, 5050FX, 3030FX, 2060SH, 3050SH, etc.",
+ v:[{n:"Andersen 100 Series",d:"fibrex composite, great AZ value, code compliant"},{n:"Milgard Tuscany",d:"vinyl, excellent AZ heat performance, local dealer"},{n:"PGT WinGuard",d:"impact-rated option if desired"}],
+ s:["Frame material","Exterior frame color","Interior frame color","Glass package (confirm SHGC ≤ 0.25 / U ≤ 0.40)","Screen type","Notes"]},
+{id:"ext-lighting",name:"Exterior lighting — lanterns, spots, kick lights",note:"Per electrical plan: entry lanterns at front door, dual spotlights on exterior corners, WP outlets at porch and patio, kick lights at porch and patio.",
+ v:[{n:"Hinkley Lighting",d:"best outdoor line, strong selection"},{n:"Visual Comfort",d:"designer outdoor"},{n:"Kichler",d:"good value, wide outdoor range"}],
+ s:["Entry lantern style","Entry lantern finish","Dual spotlight style","Porch kick light style","Qty entry lanterns","Qty spotlights","Notes"]},
+{id:"ext-porch",name:"Front porch floor — 104 SF",note:"Per plans: 4\" concrete slab over 4\" ABC. Covered porch.",
+ v:[{n:"Arizona Tile",d:"natural stone, outdoor-rated"},{n:"MSI Surfaces",d:"porcelain pavers, frost-rated"},{n:"Concrete stain / seal",d:"H&C ShieldCrete or Behr — durable, simple"}],
+ s:["Material","Size / pattern","Color","Grout / joint color","Sq ft: 104","Notes"]},
+{id:"ext-patio",name:"Rear patio floor — 368 SF",note:"Per plans: 9' ceiling covered patio. Outdoor-rated surface required.",
+ v:[{n:"Arizona Tile",d:"20×20 or 24×24 porcelain pavers"},{n:"MSI Surfaces",d:"large format pavers, very popular AZ"},{n:"Saltillo tile",d:"traditional AZ/Southwest, must be sealed"}],
+ s:["Material","Size","Color","Grout / joint color","Pattern","Sq ft: 368","Notes"]},
+{id:"ext-hb",name:"Hose bibs — qty 3",note:"Per electrical plan: 3 hose bibs (HB) shown. Per plumbing notes: integral backflow preventer required on all hose bibs.",
+ v:[{n:"Woodford Model 22",d:"industry standard, frost-free"},{n:"Prier C-144",d:"premium brass, long-lasting"},{n:"Watts B-11",d:"good value, code compliant"}],
+ s:["Finish","Length (inches from wall)","Qty: 3","Notes"]}
+]},
+
+{id:"kitchen",label:"Kitchen",items:[
+{id:"k-cab",name:"Kitchen cabinets — full height noted on plans",note:"Per floor plan: FULL HEIGHT CAB noted. 10' ceilings allow stacked uppers or full-height slab doors.",
+ v:[{n:"Dura Supreme",d:"semi-custom, US-made, 6–8 wk lead time"},{n:"Bellmont Cabinet Co.",d:"semi-custom, strong value"},{n:"Plato Woodwork",d:"full custom, longer lead time"}],
+ s:["Door style","Finish / color","Box material","Upper cab height (to 10' ceiling?)","Crown molding?","Hardware finish","Notes"]},
+{id:"k-cnt",name:"Kitchen countertops — perimeter",note:"36\" flat counter noted on floor plan. Coordinate with backsplash and cabinet finish.",
+ v:[{n:"Arizona Tile",d:"natural stone slabs, local AZ warehouses"},{n:"MSI Surfaces",d:"quartz & quartzite, large slabs"},{n:"Bedrosians",d:"quartz, quartzite, marble"}],
+ s:["Material","Color / slab name","Edge profile","Thickness","Approx sq ft (perimeter)","Notes"]},
+{id:"k-isl",name:"Kitchen island countertop",note:"Island shown on floor plan. Confirm waterfall vs. standard edge. Can be contrasting material.",
+ v:[{n:"Arizona Tile",d:""},{n:"MSI Surfaces",d:""},{n:"Bedrosians",d:""}],
+ s:["Material (match or contrast?)","Color / slab name","Edge profile","Waterfall sides?","Approx sq ft","Notes"]},
+{id:"k-bt",name:"Kitchen backsplash",note:"Full height behind range recommended. Ties to countertop and cabinet choice.",
+ v:[{n:"Ann Sacks",d:"designer tile"},{n:"Bedrosians",d:"large format and decorative"},{n:"Tile Bar",d:"online, good value designer looks"}],
+ s:["Material","Size","Color / pattern","Grout color","Full height or standard?","Notes"]},
+{id:"k-fl",name:"Kitchen floor",note:"Connects to dining and entry visually. Coordinate with main floor material.",
+ v:[{n:"MSI Surfaces",d:"large format tile"},{n:"Ann Sacks",d:"premium tile"},{n:"Floor & Decor",d:"in-stock, fast lead time"}],
+ s:["Material","Size","Color / SKU","Grout color","Notes"]},
+{id:"k-sink",name:"Kitchen sink",note:"Per waste ISO: 1 kitchen sink. D/W and REF shown on electrical plan.",
+ v:[{n:"Rohl",d:"fireclay farmhouse, premium"},{n:"Kohler",d:"undermount or farmhouse options"},{n:"Kraus",d:"good value stainless"}],
+ s:["Mount type (undermount / farmhouse / top-mount)","Material","Basins (single / double)","Finish / color","Model / SKU","Notes"]},
+{id:"k-fct",name:"Kitchen faucet",note:"Pull-down standard. Touchless optional.",
+ v:[{n:"Brizo",d:"design-forward, premium"},{n:"Kohler",d:"broad range, mid to high"},{n:"Rohl",d:"luxury, European styling"}],
+ s:["Finish","Style (pull-down / pull-out)","Touchless?","Model / SKU","Notes"]},
+{id:"k-range",name:"Gas range",note:"Per plans: GAS noted at range location. Gas schematic: 50,000 BTU (50 CFH). Electrical plan also shows 50 AMP circuit (dual-fuel option possible).",
+ v:[{n:"Wolf",d:"pro-style gas, best in class"},{n:"Thermador",d:"pro-style, Star burner"},{n:"Bertazzoni",d:"Italian, great value at pro level"}],
+ s:["Width (30\" / 36\" / 48\")","Fuel type (gas / dual-fuel)","Burner count","Color / finish","Model / SKU","Notes"]},
+{id:"k-hood",name:"Range hood",note:"CRITICAL: duct run must be confirmed during framing NOW. Per energy code M1503.6: hoods over 400 CFM require makeup air.",
+ v:[{n:"Zephyr",d:"design-forward, strong CFM options"},{n:"Wolf",d:"if matching range brand"},{n:"Proline",d:"commercial-style, strong value"}],
+ s:["Width (match range)","CFM rating","Style (wall / island / insert)","Finish","Duct size (confirm with HVAC now)","Model / SKU","Notes"]},
+{id:"k-ref",name:"Refrigerator",note:"Per electrical plan: REF w/ ice line shown. Counter-depth or built-in preferred with custom cabinetry.",
+ v:[{n:"Sub-Zero",d:"best quality, 20+ yr life, built-in"},{n:"Thermador Freedom",d:"column system, flush install"},{n:"Café (GE)",d:"strong value, finish options"}],
+ s:["Width","Built-in or freestanding","Finish","Configuration (French door / column)","Model / SKU","Notes"]},
+{id:"k-dw",name:"Dishwasher",note:"Panel-ready strongly recommended for seamless cabinet look.",
+ v:[{n:"Miele",d:"quietest, most durable"},{n:"Bosch 800 Series",d:"excellent value, panel-ready"},{n:"Thermador",d:"if matching appliance suite"}],
+ s:["Panel-ready?","Finish","Model / SKU","Notes"]},
+{id:"k-micro",name:"Microwave",note:"Built-in or drawer. No over-range (separate hood).",
+ v:[{n:"Sharp",d:"best microwave drawer, very reliable"},{n:"Wolf",d:"built-in, matches suite"},{n:"Café (GE)",d:""}],
+ s:["Type (drawer / built-in)","Finish","Model / SKU","Notes"]},
+{id:"k-ltg",name:"Kitchen lighting — pendants + recessed",note:"Per electrical plan: recessed throughout kitchen, island pendant positions shown. 10' ceiling.",
+ v:[{n:"Visual Comfort",d:"curated range"},{n:"Rejuvenation",d:"American traditional"},{n:"Cedar & Moss",d:"modern / industrial"}],
+ s:["Island pendant style","Pendant finish","Pendant qty","Recessed qty (approx)","Notes"]}
+]},
+
+{id:"mbath",label:"Master Bath",items:[
+{id:"mb-fl",name:"Master bath floor tile",note:"10' ceiling bath. Radiant heat worth discussing — popular in AZ for cooler mornings.",
+ v:[{n:"Ann Sacks",d:"luxury tile"},{n:"Walker Zanger",d:"designer, natural stone"},{n:"MSI Surfaces",d:"large format options"}],
+ s:["Material","Size","Color / SKU","Heated floor (Nuheat)?","Grout color","Sq ft approx: ~120","Notes"]},
+{id:"mb-sh-tile",name:"Master shower wall + floor tile",note:"Per plans: TILE TO 6' MIN, PRE-FAB PAN. Per code: smooth hard surface to 72\" required. Niche accent optional.",
+ v:[{n:"Ann Sacks",d:""},{n:"Walker Zanger",d:""},{n:"MSI Surfaces",d:""}],
+ s:["Wall tile material","Wall tile size","Floor tile (slip-resistant req'd)","Niche accent tile","Grout color","Sq ft wall approx","Notes"]},
+{id:"mb-cnt",name:"Master bath countertop — double vanity",note:"Double sink vanity shown. Bath approx 13'4\" × 9'4\".",
+ v:[{n:"Arizona Tile",d:""},{n:"Bedrosians",d:""},{n:"MSI Surfaces",d:""}],
+ s:["Material","Color / slab name","Edge profile","Sq ft approx","Notes"]},
+{id:"mb-cab",name:"Master bath vanity cabinet",note:"Double vanity. Match or complement kitchen cabinets.",
+ v:[{n:"Dura Supreme",d:""},{n:"James Martin Furniture",d:"vanity-specific"},{n:"Waterworks",d:"luxury bath cabinetry"}],
+ s:["Width (total vanity)","Door style","Finish","Hardware finish","Notes"]},
+{id:"mb-tub",name:"Freestanding soaking tub",note:"URGENT: tub rough-in must be located during framing NOW. Floor-mount filler requires blocking in subfloor. Confirm tub fits in 13'4\" room with clearances.",
+ v:[{n:"Victoria + Albert",d:"volcanic limestone, iconic shapes"},{n:"Bain Ultra",d:"acrylic, air-jet options"},{n:"MTI Baths",d:"US-made, solid acrylic, custom sizes"}],
+ s:["Material","Shape","Length (confirm clearances)","Filler type (floor-mount / wall-mount)","Color / finish","Model / SKU","Notes"]},
+{id:"mb-filler",name:"Freestanding tub filler",note:"Floor-mount or deck-mount. Match finish to other bath fixtures.",
+ v:[{n:"Brizo",d:""},{n:"Watermark Designs",d:"luxury, sculptural"},{n:"Rohl",d:""}],
+ s:["Mount type","Finish","Model / SKU","Notes"]},
+{id:"mb-shower",name:"Master shower system",note:"Per electrical plan: R&SH (rod & shelf) shown. Thermostatic valve recommended at this price point.",
+ v:[{n:"Brizo",d:"premium multi-function systems"},{n:"Hansgrohe",d:"German engineering"},{n:"Kohler DTV",d:"digital thermostatic"}],
+ s:["Valve type (thermostatic / pressure-balance)","Showerhead style","Handheld?","Body sprays?","Finish","Model / SKU","Notes"]},
+{id:"mb-fct",name:"Master bath faucets — qty 2",note:"Two sinks shown. Match finish throughout master bath.",
+ v:[{n:"Brizo",d:""},{n:"Watermark Designs",d:""},{n:"Kohler",d:""}],
+ s:["Mount type (widespread / centerset)","Finish","Model / SKU","Qty: 2","Notes"]},
+{id:"mb-toilet",name:"Master W.C. toilet — qty 1",note:"Per floor plan: separate W.C. room. 30\" min clearance per plumbing notes.",
+ v:[{n:"Toto",d:"best flushing tech, Washlet available"},{n:"Kohler",d:"wide range"},{n:"Duravit",d:"European design, wall-hung option"}],
+ s:["Style (one-piece / two-piece / wall-hung)","Finish","Washlet / bidet seat?","Model / SKU","Notes"]},
+{id:"mb-mirrors",name:"Master bath mirrors — qty 2",note:"One over each vanity sink.",
+ v:[{n:"Robern",d:"lit medicine cabinets, excellent quality"},{n:"Uttermost",d:"framed mirrors, design range"},{n:"Custom frameless",d:"local glass shop, most flexible sizing"}],
+ s:["Style (framed / frameless / lit)","Width each","Height each","Finish","Notes"]},
+{id:"mb-ltg",name:"Master bath lighting — vanity + ambient",note:"Per electrical plan: vanity bar lights shown, recessed throughout. 10' ceiling.",
+ v:[{n:"Visual Comfort",d:""},{n:"Hinkley Lighting",d:"strong bath line"},{n:"Mitzi by Hudson Valley",d:"affordable designer"}],
+ s:["Vanity bar or sconces?","Finish","Qty vanity fixtures: 2","Notes"]}
+]},
+
+{id:"baths",label:"Hall Bath + 2nd Bath",items:[
+{id:"hb-fl",name:"1st floor hall bath — floor tile",note:"Per floor plan: bath serving Beds 2 & 3. Approx 7'8\" × 8'4\".",
+ v:[{n:"MSI Surfaces",d:""},{n:"Bedrosians",d:""},{n:"Floor & Decor",d:"in-stock, fast"}],
+ s:["Material","Tile size","Color / SKU","Grout color","Sq ft approx: ~64","Notes"]},
+{id:"hb-sh",name:"1st floor hall bath — shower tile",note:"Per plans: TILE TO 6' MIN, PRE-FAB PAN. R&SH noted.",
+ v:[{n:"MSI Surfaces",d:""},{n:"Bedrosians",d:""},{n:"Floor & Decor",d:""}],
+ s:["Wall tile material","Size","Grout color","Pan: prefab fiberglass or tile?","Notes"]},
+{id:"hb-van",name:"1st floor hall bath — vanity, counter, faucet",note:"Single vanity approx 30–36\" wide.",
+ v:[{n:"Strasser Woodenworks",d:"solid wood, good mid-range"},{n:"James Martin Furniture",d:""},{n:"Bellmont Cabinet Co.",d:""}],
+ s:["Vanity width","Door style","Finish","Counter material","Hardware","Faucet finish","Model / SKU","Notes"]},
+{id:"hb-toilet",name:"1st floor hall bath — toilet",note:"Per waste ISO: W.C. confirmed.",
+ v:[{n:"Toto",d:""},{n:"Kohler",d:""},{n:"American Standard",d:"good value"}],
+ s:["Style","Finish","Model / SKU","Notes"]},
+{id:"hb-ltg",name:"1st floor hall bath — lighting",note:"Per electrical plan: vanity bar light shown.",
+ v:[{n:"Hinkley Lighting",d:""},{n:"Mitzi by Hudson Valley",d:""},{n:"Kichler",d:""}],
+ s:["Style","Finish","Model / SKU","Notes"]},
+{id:"ub-fl",name:"2nd floor bath — floor tile",note:"Per floor plan: bath serving Bed 4 and Loft. Approx 5' × 5'. 9' ceiling.",
+ v:[{n:"MSI Surfaces",d:""},{n:"Bedrosians",d:""},{n:"Floor & Decor",d:""}],
+ s:["Material","Tile size","Color / SKU","Grout color","Notes"]},
+{id:"ub-sh",name:"2nd floor bath — shower tile",note:"Per plans: TILE TO 6' MIN, PRE-FAB PAN noted on 2nd floor.",
+ v:[{n:"MSI Surfaces",d:""},{n:"Bedrosians",d:""},{n:"Floor & Decor",d:""}],
+ s:["Wall tile","Size","Grout color","Pan: prefab or tile?","Notes"]},
+{id:"ub-van",name:"2nd floor bath — vanity, counter, faucet",note:"Single vanity. Bath approx 5' × 10'6\" total.",
+ v:[{n:"Strasser Woodenworks",d:""},{n:"James Martin Furniture",d:""},{n:"IKEA Godmorgon",d:"fast, affordable, functional"}],
+ s:["Width","Finish","Counter material","Hardware","Faucet finish","Model / SKU","Notes"]},
+{id:"ub-toilet",name:"2nd floor bath — toilet",note:"",
+ v:[{n:"Toto",d:""},{n:"Kohler",d:""},{n:"American Standard",d:""}],
+ s:["Style","Finish","Model / SKU","Notes"]},
+{id:"ub-ltg",name:"2nd floor bath — lighting",note:"Per electrical plan: vanity bar light shown.",
+ v:[{n:"Hinkley Lighting",d:""},{n:"Mitzi by Hudson Valley",d:""},{n:"Kichler",d:""}],
+ s:["Style","Finish","Model / SKU","Notes"]}
+]},
+
+{id:"floors",label:"Flooring",items:[
+{id:"fl-main",name:"Main living areas — entry, living, dining, hallways",note:"Per floor plan: all 10' ceilings, open to each other visually. One material strongly recommended. Approx 1,200+ sq ft.",
+ v:[{n:"Shaw Floors",d:"LVP & hardwood, wide availability"},{n:"Provenza",d:"designer hardwood, showroom pricing"},{n:"Coswick",d:"premium solid hardwood, 3–4 wk ship"}],
+ s:["Material (hardwood / LVP / large tile)","Species or product name","Width","Color / SKU","Sq ft approx (main areas)","Notes"]},
+{id:"fl-beds",name:"Bedrooms — Master, Beds 2, 3, 4",note:"Can match main floor or use carpet. AZ clients often choose LVP throughout for dust / pets. Master: ~15'×17'6\". Beds 2&3: ~12'×12' ea. Bed 4: ~13'×15'.",
+ v:[{n:"Shaw Floors",d:"carpet & LVP both"},{n:"Stanton Carpet",d:"premium carpet"},{n:"Provenza",d:"if matching main floor"}],
+ s:["Material","Color / SKU","Master Bed sq ft: ~263","Beds 2+3 sq ft: ~144 ea","Bed 4 sq ft: ~195","Notes"]},
+{id:"fl-loft",name:"Loft — 2nd floor",note:"Per floor plan: Loft 13'8\" × 15'10\" (approx 217 SF). Open-concept — visible from below if open rail.",
+ v:[{n:"Shaw Floors",d:""},{n:"Stanton Carpet",d:""},{n:"Provenza",d:""}],
+ s:["Material","Color / SKU","Sq ft: ~217","Notes"]},
+{id:"fl-study",name:"Study — 1st floor",note:"Per floor plan: Study 8'8\" × 15'10\" (approx 138 SF). Off entry.",
+ v:[{n:"Shaw Floors",d:""},{n:"Provenza",d:""},{n:"Stanton Carpet",d:""}],
+ s:["Material","Color / SKU","Sq ft: ~138","Notes"]},
+{id:"fl-laundry",name:"Laundry room — 7'8\" × 9'4\"",note:"Tile preferred. Waterproof, easy clean. Approx 72 SF.",
+ v:[{n:"MSI Surfaces",d:""},{n:"Floor & Decor",d:""},{n:"Bedrosians",d:""}],
+ s:["Material","Tile size","Color / SKU","Grout color","Sq ft: ~72","Notes"]},
+{id:"fl-pantry",name:"Pantry — 10'6\" × 13'",note:"Approx 137 SF. Can match kitchen or simpler tile.",
+ v:[{n:"Floor & Decor",d:""},{n:"MSI Surfaces",d:""},{n:"Bedrosians",d:""}],
+ s:["Material","Tile size","Color / SKU","Notes"]},
+{id:"fl-closets",name:"Master closet — 15' × 4' + bedroom closets",note:"Master closet is a dedicated room. Can match bedroom floor or use contrasting tile.",
+ v:[{n:"Shaw Floors",d:""},{n:"Floor & Decor",d:""},{n:"Stanton Carpet",d:""}],
+ s:["Material","Color / SKU","Notes"]}
+]},
+
+{id:"lighting",label:"Lighting",items:[
+{id:"lt-entry",name:"Entry — recessed + lantern",note:"Per electrical plan: lantern symbol at front door, recessed in entry. 10' ceiling.",
+ v:[{n:"Visual Comfort",d:""},{n:"Currey & Company",d:"sculptural"},{n:"Arteriors",d:"high-end art-piece"}],
+ s:["Lantern style","Lantern finish","Recessed qty (~2–3)","Notes"]},
+{id:"lt-living",name:"Living room — recessed (approx 10 fixtures)",note:"Per electrical plan: approx 10 recessed lights in living room. 10' ceiling. Dimmer required.",
+ v:[{n:"Halo (Eaton)",d:"contractor grade, reliable"},{n:"WAC Lighting",d:"premium trim"},{n:"Lutron Caseta",d:"dimming system"}],
+ s:["Recessed trim style","Size (4\" or 6\")","Color temp (2700K warm rec.)","Qty: ~10","Dimmer brand","Notes"]},
+{id:"lt-dining",name:"Dining room — chandelier (5-light noted on plans)",note:"Per electrical plan: 5-LIGHT CHANDELIER symbol explicitly shown in dining room. 10' ceiling. Scale to dining table.",
+ v:[{n:"Visual Comfort",d:""},{n:"Currey & Company",d:"sculptural chandeliers"},{n:"Circa Lighting",d:""}],
+ s:["Style","Diameter (12\" less than table width each side)","Finish","Drop length","Model / SKU","Notes"]},
+{id:"lt-kitchen",name:"Kitchen — island pendants + recessed",note:"Per electrical plan: recessed throughout kitchen, pendant locations at island. 10' ceiling.",
+ v:[{n:"Visual Comfort",d:""},{n:"Rejuvenation",d:""},{n:"Cedar & Moss",d:"modern / industrial"}],
+ s:["Island pendant style","Pendant finish","Pendant qty","Recessed qty (~8–10)","Notes"]},
+{id:"lt-master",name:"Master bedroom — ceiling fan",note:"Per electrical plan: ceiling fan symbol in master bedroom. 10' ceiling.",
+ v:[{n:"Minka-Aire",d:"design-forward ceiling fans"},{n:"Hunter Fan Co.",d:"reliable, good modern options"},{n:"Casablanca",d:"premium quiet motors"}],
+ s:["Fan or fixture?","Style","Finish","Blade span","Notes"]},
+{id:"lt-beds",name:"Bedrooms 2, 3, 4 + Loft — ceiling fans",note:"Per electrical plan: ceiling fan symbols in Beds 2 and 3, Loft confirmed. Bed 4 likely same. AZ standard.",
+ v:[{n:"Minka-Aire",d:""},{n:"Hunter Fan Co.",d:""},{n:"Casablanca",d:""}],
+ s:["Style","Finish","Blade span","Qty: 4 fans (Beds 2/3/4 + Loft)","Notes"]},
+{id:"lt-study",name:"Study — lighting",note:"Per electrical plan: recessed lights shown in study. 10' ceiling.",
+ v:[{n:"Halo (Eaton)",d:""},{n:"WAC Lighting",d:""},{n:"Visual Comfort",d:"if statement fixture"}],
+ s:["Style (recessed only or statement fixture?)","Finish","Qty","Notes"]},
+{id:"lt-porch",name:"Front porch — lantern + kick lights",note:"Per electrical plan: porch lantern, kick lights, and under-eave lighting shown. WP required.",
+ v:[{n:"Hinkley Lighting",d:"strong outdoor line"},{n:"Visual Comfort",d:""},{n:"Kichler",d:""}],
+ s:["Porch lantern style","Finish","Kick light style","Qty lanterns","Qty kick lights","Notes"]},
+{id:"lt-patio",name:"Rear patio — recessed + kick lights",note:"Per electrical plan: recessed (WP) and kick lights shown at covered patio. 368 SF.",
+ v:[{n:"Hinkley Lighting",d:""},{n:"Kichler",d:""},{n:"WAC Lighting",d:""}],
+ s:["Recessed style (WP / damp-rated)","Kick light style","Qty recessed","Qty kick lights","Notes"]},
+{id:"lt-balcony",name:"Balcony — 2nd floor, 104 SF",note:"Per electrical plan: recessed + WP outlet on balcony.",
+ v:[{n:"Hinkley Lighting",d:""},{n:"Kichler",d:""},{n:"WAC Lighting",d:""}],
+ s:["Style","Finish","Qty","Notes"]},
+{id:"lt-system",name:"Recessed lighting system — whole home",note:"Per code N1104.1: 90% of permanent fixtures must be high-efficacy. IC-rated required per thermal envelope. All recessed must be air-tight (ICAT) rated.",
+ v:[{n:"Halo (Eaton)",d:"standard, good electrician pricing"},{n:"Lutron Caseta",d:"best whole-home dimming ecosystem"},{n:"WAC Lighting",d:"premium trim options"}],
+ s:["Trim style (baffle / reflector / lens)","Size (4\" or 6\")","Color temp (all rooms)","Dimmer brand","Notes"]}
+]},
+
+{id:"laundry",label:"Laundry & Closets",items:[
+{id:"lau-cab",name:"Laundry cabinetry — 7'8\" × 9'4\" room",note:"Upper and lower cabinets with utility sink space.",
+ v:[{n:"Dura Supreme",d:"match kitchen if desired"},{n:"IKEA Sektion",d:"fast, affordable, functional"},{n:"Bellmont Cabinet Co.",d:""}],
+ s:["Style","Finish","Configuration (upper / lower / open shelves)","Notes"]},
+{id:"lau-sink",name:"Laundry utility sink + faucet",note:"Per waste ISO: utility sink confirmed.",
+ v:[{n:"Kohler",d:"drop-in cast iron, classic"},{n:"Swanstone",d:"composite, durable, affordable"},{n:"Rohl",d:"if aesthetics matter"}],
+ s:["Material","Mount type","Faucet finish","Notes"]},
+{id:"lau-wd",name:"Washer + dryer",note:"Per electrical plan: 220 DISC (dryer disconnect) shown. Gas dryer option available — gas stub shown on plans.",
+ v:[{n:"Miele",d:"best longevity, quiet"},{n:"LG Signature",d:"smart features, strong value"},{n:"Speed Queen",d:"commercial-grade durability, simple"}],
+ s:["Stack or side-by-side","Dryer fuel (gas or electric)","Finish","Model / SKU","Notes"]},
+{id:"mc-closet",name:"Master closet system — 15' × 4'",note:"Per floor plan: dedicated master closet room. R&SH (rod & shelf) noted.",
+ v:[{n:"California Closets",d:"full design service, premium"},{n:"Inspired Closets",d:"regional, similar quality"},{n:"Custom built-ins",d:"local carpenter, most flexible"}],
+ s:["Style","Material / finish","Double hang sections?","Drawer qty","Shoe shelving?","Notes"]},
+{id:"pantry-sh",name:"Pantry shelving — 10'6\" × 13'",note:"Dedicated pantry room. Full-height shelving.",
+ v:[{n:"ClosetMaid",d:"wire shelving, very durable"},{n:"Elfa (Container Store)",d:"adjustable, good design"},{n:"Custom built-ins",d:""}],
+ s:["Style (wire / wood / melamine)","Shelf depth","Configuration","Notes"]}
+]},
+
+{id:"millwork",label:"Doors & Millwork",items:[
+{id:"int-dr",name:"Interior doors — whole home",note:"Per floor plan: multiple sizes noted (2880, 3080, 2680, 2468, 3090, 3680 etc.). Solid core standard.",
+ v:[{n:"TruStile",d:"MDF / solid, exceptional quality"},{n:"Masonite",d:"broad range, good value"},{n:"Karona",d:"solid wood, custom profiles"}],
+ s:["Style","Material","Standard width (2'8\" or 3'0\")","Paint or stain","Notes"]},
+{id:"int-hw",name:"Interior door hardware — whole home",note:"One finish for the whole home. Per plans: lever hardware required on accessible entries.",
+ v:[{n:"Emtek",d:"best design range, solid brass"},{n:"Rejuvenation",d:"period-appropriate, well-priced"},{n:"Baldwin",d:"premium, US-made"}],
+ s:["Style (lever / knob)","Finish","Model / SKU","Notes"]},
+{id:"stair",name:"Stair railing + balustrade",note:"Per plans: stair from 1st to 2nd floor (loft/Bed4). 36\" min guardrail per plans. 4\" max baluster spacing. Stainless welded base plate detail shown on plans.",
+ v:[{n:"Iron Balusters (local AZ)",d:"wrought iron, many styles"},{n:"L.J. Smith",d:"full stair system, custom"},{n:"Cable Bullet",d:"if cable rail preferred"}],
+ s:["Style","Material","Newel post style","Baluster style","Handrail finish","Loft / balcony guard rail to match?","Notes"]},
+{id:"trim",name:"Baseboard + door casing — whole home",note:"10' ceilings — taller baseboard looks proportional. 5\"–7\" height recommended. One profile for whole home.",
+ v:[{n:"WindsorONE",d:"primed MDF, clean profiles"},{n:"Metrie",d:"good selection"},{n:"Local millwork supplier",d:"custom profiles MDF or wood"}],
+ s:["Baseboard height","Baseboard profile","Casing style","Paint or stain","Notes"]},
+{id:"fireplace",name:"Fireplace surround + mantle — Isokern M36OD",note:"Per plans: ISOKERN M36OD (ICC ESR-2316), direct vent gas shutoff within 4' required. 18\" hearth per plans. Surround and mantle to be designed.",
+ v:[{n:"Arizona Tile",d:"stone surround, ledger panels"},{n:"Ann Sacks",d:"designer tile surround"},{n:"Custom plaster",d:"local plasterer for smooth contemporary look"}],
+ s:["Surround material","Surround color / finish","Hearth material","Mantle material / finish","Hearth depth: 18\" per plans","Notes"]}
+]},
+
+{id:"paint",label:"Paint & Grout",items:[
+{id:"pt-int",name:"Interior paint — walls, trim, ceilings",note:"10' ceilings make color choices very prominent. Trim color is a major design decision throughout.",
+ v:[{n:"Sherwin-Williams",d:"Emerald or Cashmere lines — both excellent"},{n:"Benjamin Moore",d:"Aura or Regal lines"},{n:"Farrow & Ball",d:"premium, designer palette"}],
+ s:["Main wall color","Accent wall color(s)","Trim / baseboard color","Ceiling color","Wall sheen","Trim sheen","Notes"]},
+{id:"pt-ext",name:"Exterior paint — stucco, siding, trim, door",note:"Coordinate with brick veneer color selected in Exterior tab.",
+ v:[{n:"Sherwin-Williams Duration Exterior",d:"excellent coverage, AZ heat stable"},{n:"Benjamin Moore Aura Exterior",d:""},{n:"Farrow & Ball",d:"if used on front door"}],
+ s:["Stucco body color","Hardboard siding color","Exterior trim color","Front door color","Garage door color","Notes"]},
+{id:"grout",name:"Grout colors — all tile locations summary",note:"Decide all grout in one session for whole-home coordination. Choose grout and tile simultaneously.",
+ v:[{n:"Mapei Ultracolor Plus FA",d:"best stain resistance, wide range — recommended"},{n:"Custom Building Products SpectraLOCK",d:"epoxy, most durable"},{n:"Laticrete Permacolor",d:"good value, solid range"}],
+ s:["Kitchen backsplash grout","Kitchen floor grout","Master bath floor grout","Master shower wall grout","Master shower floor grout","Hall bath grout (1st fl)","2nd floor bath grout","Porch tile grout","Patio tile joint color","Grout brand for whole home","Notes"]}
+]}
+];
+
+const ST={};
+D.forEach(s=>s.items.forEach(i=>{ST[i.id]={status:"pending",fields:{}}}));
+
+function total(){return D.reduce((a,s)=>a+s.items.length,0)}
+function done(){return Object.values(ST).filter(v=>v.status==="selected").length}
+function prog(){
+  const p=Math.round(done()/total()*100);
+  document.getElementById("pfill").style.width=p+"%";
+  document.getElementById("ppct").textContent=p+"%";
+  document.querySelectorAll("[data-tdot]").forEach(el=>{
+    const sec=D.find(s=>s.id===el.dataset.tdot);
+    el.classList.toggle("done",sec&&sec.items.every(i=>ST[i.id].status==="selected"));
+  });
+}
+function setS(id,st){
+  ST[id].status=st;
+  const card=document.querySelector(`[data-card="${id}"]`);
+  const b=card.querySelector(".badge");
+  b.textContent=st==="selected"?"Selected":st==="na"?"N/A":"Pending";
+  b.className="badge "+st;
+  card.classList.toggle("sel",st==="selected");
+  prog();
+}
+function build(){
+  const nav=document.getElementById("tabs");
+  const wrap=document.getElementById("panels");
+  D.forEach((sec,si)=>{
+    const btn=document.createElement("button");
+    btn.className="tab"+(si===0?" active":"");
+    btn.innerHTML=`<span class="tdot" data-tdot="${sec.id}"></span>${sec.label}`;
+    btn.onclick=()=>{
+      document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));
+      document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById("p-"+sec.id).classList.add("active");
+    };
+    nav.appendChild(btn);
+    const pnl=document.createElement("div");
+    pnl.className="panel"+(si===0?" active":"");
+    pnl.id="p-"+sec.id;
+    const sh=document.createElement("div");
+    sh.className="sec-head";sh.textContent=sec.label;
+    pnl.appendChild(sh);
+    sec.items.forEach(item=>{
+      const card=document.createElement("div");
+      card.className="card";card.dataset.card=item.id;
+      const top=document.createElement("div");top.className="card-top";
+      const nb=document.createElement("div");
+      nb.innerHTML=`<div class="iname">${item.name}</div><div class="inote">${item.note}</div>`;
+      const badge=document.createElement("span");badge.className="badge pending";badge.textContent="Pending";
+      top.appendChild(nb);top.appendChild(badge);card.appendChild(top);
+      const vd=document.createElement("div");vd.className="vendors";
+      item.v.forEach(v=>{
+        const c=document.createElement("div");c.className="vc";
+        c.innerHTML=`<b>${v.n}</b>${v.d?" — "+v.d:""}`;vd.appendChild(c);
+      });
+      card.appendChild(vd);
+      const cols=Math.min(item.s.length,4);
+      const sg=document.createElement("div");sg.className="spec-grid";
+      sg.style.gridTemplateColumns=`repeat(${cols},minmax(0,1fr))`;
+      item.s.forEach(spec=>{
+        const sf=document.createElement("div");sf.className="sf";
+        const lbl=document.createElement("label");lbl.textContent=spec;
+        const isN=spec.toLowerCase().includes("note");
+        let inp;
+        if(isN){inp=document.createElement("textarea");}
+        else{inp=document.createElement("input");inp.type="text";}
+        inp.placeholder=isN?"Notes...":"";
+        inp.addEventListener("input",()=>{ST[item.id].fields[spec]=inp.value});
+        sf.appendChild(lbl);sf.appendChild(inp);sg.appendChild(sf);
+      });
+      card.appendChild(sg);
+      const acts=document.createElement("div");acts.className="actions";
+      [["Mark selected","sel","pri"],["Reset to pending","pending",""],["Not applicable","na",""]].forEach(([lbl,st,cls])=>{
+        const b=document.createElement("button");b.className="btn"+(cls?" "+cls:"");b.textContent=lbl;
+        b.onclick=()=>setS(item.id,st==="sel"?"selected":st);
+        acts.appendChild(b);
+      });
+      card.appendChild(acts);pnl.appendChild(card);
+    });
+    wrap.appendChild(pnl);
+  });
+}
+function doExport(){
+  const client=document.getElementById("f-client").value||"Dillenburg";
+  const date=document.getElementById("f-date").value||"—";
+  const stage=document.getElementById("f-stage").value||"—";
+  let out=`MILLHOUSE CUSTOM HOMES — MATERIAL SELECTIONS\n`;
+  out+=`PROJECT: Dillenburg Residence | Permit PER25-08870 | Pinal County AZ\n`;
+  out+=`CLIENT: ${client} | DATE: ${date} | STAGE: ${stage}\n`;
+  out+=`COMPLETION: ${done()} of ${total()} items selected\n`;
+  out+="=".repeat(60)+"\n\n";
+  D.forEach(sec=>{
+    out+=sec.label.toUpperCase()+"\n"+"—".repeat(40)+"\n";
+    sec.items.forEach(item=>{
+      const s=ST[item.id];
+      out+=`\n  ${item.name}\n  Status: ${s.status.toUpperCase()}\n`;
+      item.s.forEach(sp=>{out+=`  ${sp}: ${s.fields[sp]||"—"}\n`});
+    });
+    out+="\n";
+  });
+  const el=document.getElementById("export-out");
+  el.style.display="block";el.textContent=out;
+  el.scrollIntoView({behavior:"smooth"});
+}
+build();prog();
+</script>
+</body>
+</html>
