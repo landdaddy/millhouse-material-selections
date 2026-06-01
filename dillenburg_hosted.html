@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dillenburg Residence — Selections · MILLHOUSE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #fffaf2;
+  --ink: #1c1a17;
+  --muted: #7a7268;
+  --border: #e8e2d9;
+  --border-em: #c8c0b4;
+  --surface: #f5f0e8;
+  --gold: #b89a6a;
+  --radius: 6px;
+  --radius-lg: 10px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); font-size: 14px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+.site-header { border-bottom: 1px solid var(--border); padding: 0 2.5rem; display: flex; align-items: center; justify-content: space-between; height: 56px; background: var(--cream); position: sticky; top: 0; z-index: 100; }
+.wordmark { font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 13px; letter-spacing: .2em; text-transform: uppercase; color: var(--ink); text-decoration: none; }
+.sync-status { font-size: 11px; color: var(--gold); font-style: italic; opacity: 0; transition: opacity .4s; }
+.sync-status.show { opacity: 1; }
+
+.project-hero { padding: 2.5rem 2.5rem 1.75rem; border-bottom: 1px solid var(--border); display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; }
+.project-eyebrow { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: .4rem; }
+.project-title { font-family: 'EB Garamond', serif; font-size: 2.4rem; font-weight: 400; line-height: 1.1; color: var(--ink); margin-bottom: .3rem; }
+.project-sub { font-size: 12px; color: var(--muted); }
+.meta-fields { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
+.mf { display: flex; flex-direction: column; gap: 4px; }
+.mf label { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+.mf input { font-family: 'DM Sans', sans-serif; font-size: 13px; padding: 7px 11px; border: 1px solid var(--border-em); border-radius: var(--radius); background: var(--surface); color: var(--ink); width: 160px; }
+.mf input:focus { outline: none; border-color: var(--gold); background: var(--cream); }
+
+.prog-strip { padding: .9rem 2.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 14px; }
+.prog-label { font-size: 11px; color: var(--muted); white-space: nowrap; }
+.prog-track { flex: 1; height: 2px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.prog-fill { height: 100%; background: var(--gold); border-radius: 2px; transition: width .4s; width: 0%; }
+.prog-pct { font-size: 11px; color: var(--muted); min-width: 30px; text-align: right; }
+
+.tabs-bar { padding: 0 2.5rem; border-bottom: 1px solid var(--border); display: flex; gap: 0; overflow-x: auto; background: var(--cream); position: sticky; top: 56px; z-index: 90; scrollbar-width: none; }
+.tabs-bar::-webkit-scrollbar { display: none; }
+.tab { font-size: 12px; letter-spacing: .04em; padding: .85rem 1.1rem; border: none; border-bottom: 2px solid transparent; background: transparent; color: var(--muted); cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 6px; transition: color .15s, border-color .15s; margin-bottom: -1px; font-family: 'DM Sans', sans-serif; }
+.tab:hover { color: var(--ink); }
+.tab.active { color: var(--ink); border-bottom-color: var(--ink); font-weight: 500; }
+.tdot { width: 5px; height: 5px; border-radius: 50%; background: var(--border-em); flex-shrink: 0; transition: background .2s; }
+.tdot.done { background: #7aab72; }
+
+.main { max-width: 900px; margin: 0 auto; padding: 2rem 2.5rem 4rem; }
+.panel { display: none; }
+.panel.active { display: block; }
+.section-intro { margin-bottom: 2rem; }
+.section-label { font-family: 'EB Garamond', serif; font-size: 1.6rem; font-weight: 400; color: var(--ink); margin-bottom: .25rem; }
+.section-desc { font-size: 12px; color: var(--muted); }
+
+.card { background: var(--cream); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem 1.5rem; margin-bottom: 12px; transition: border-color .2s; }
+.card:hover { border-color: var(--border-em); }
+.card.sel { border-color: #a8c4a3; background: #fafdf9; }
+.card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.item-name { font-family: 'EB Garamond', serif; font-size: 1.05rem; font-weight: 400; color: var(--ink); line-height: 1.3; }
+.item-note { font-size: 11.5px; color: var(--muted); margin-top: 3px; line-height: 1.5; font-style: italic; }
+.badge { font-size: 10px; letter-spacing: .06em; text-transform: uppercase; padding: 3px 9px; border-radius: 4px; white-space: nowrap; font-weight: 500; flex-shrink: 0; font-family: 'DM Sans', sans-serif; }
+.badge.pending { background: #fef9c3; color: #854d0e; }
+.badge.selected { background: #e6f2e4; color: #3a5c38; }
+.badge.na { background: var(--surface); color: var(--muted); }
+
+.rec-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; margin-bottom: 12px; }
+.spec-grid { display: grid; gap: 8px; margin-top: 8px; }
+.sf { display: flex; flex-direction: column; gap: 4px; }
+.sf label { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+.sf input, .sf textarea { font-family: 'DM Sans', sans-serif; font-size: 13px; padding: 7px 10px; border: 1px solid var(--border-em); border-radius: var(--radius); background: var(--surface); color: var(--ink); width: 100%; transition: border-color .15s, background .15s; }
+.sf input:focus, .sf textarea:focus { outline: none; border-color: var(--gold); background: var(--cream); }
+.sf textarea { resize: vertical; min-height: 52px; }
+
+.actions { display: flex; gap: 7px; margin-top: 12px; flex-wrap: wrap; }
+.btn { font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: .04em; padding: 6px 14px; border-radius: var(--radius); border: 1px solid var(--border-em); background: var(--cream); cursor: pointer; color: var(--muted); transition: all .15s; }
+.btn:hover { background: var(--surface); color: var(--ink); }
+.btn.pri { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+.btn.pri:hover { background: #2e2b26; }
+
+.export-bar { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.export-note { font-size: 12px; color: var(--muted); font-style: italic; }
+.export-btn { font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; padding: 9px 20px; border-radius: var(--radius); border: 1px solid var(--border-em); background: var(--cream); cursor: pointer; color: var(--ink); font-weight: 500; transition: all .15s; }
+.export-btn:hover { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+#export-out { display: none; margin-top: 1rem; padding: 1.25rem; background: var(--surface); border: 1px solid var(--border-em); border-radius: var(--radius-lg); font-size: 11.5px; font-family: 'Courier New', monospace; white-space: pre-wrap; color: var(--ink); max-height: 500px; overflow-y: auto; line-height: 1.7; }
+
+.site-footer { margin-top: 4rem; padding: 2rem 2.5rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+.footer-brand { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.footer-info { font-size: 11px; color: var(--muted); }
+
+.loading-screen { position: fixed; inset: 0; background: var(--cream); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; z-index: 999; transition: opacity .4s; }
+.loading-screen.hidden { opacity: 0; pointer-events: none; }
+.loading-wordmark { font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 13px; letter-spacing: .2em; text-transform: uppercase; color: var(--ink); }
+.loading-sub { font-size: 12px; color: var(--muted); font-style: italic; }
+.loading-bar { width: 120px; height: 1px; background: var(--border); border-radius: 1px; overflow: hidden; }
+.loading-bar-fill { height: 100%; background: var(--gold); border-radius: 1px; animation: loadpulse 1.2s ease-in-out infinite; }
+@keyframes loadpulse { 0%{width:0%} 50%{width:100%} 100%{width:0%;margin-left:100%} }
+
+@media(max-width:640px) {
+  .site-header, .project-hero, .prog-strip, .tabs-bar, .main { padding-left: 1.25rem; padding-right: 1.25rem; }
+  .project-title { font-size: 1.9rem; }
+  .rec-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="loading-screen" id="loader">
+  <div class="loading-wordmark">MILLHOUSE</div>
+  <div class="loading-bar"><div class="loading-bar-fill"></div></div>
+  <div class="loading-sub">Loading selections…</div>
+</div>
+
+<header class="site-header">
+  <a class="wordmark" href="https://www.millhousebuilt.com">MILLHOUSE</a>
+  <span class="sync-status" id="sync-status">Saved</span>
+</header>
+
+<div class="project-hero">
+  <div>
+    <div class="project-eyebrow">Material Selections</div>
+    <div class="project-title">Dillenburg Residence</div>
+    <div class="project-sub">3,417 SF livable &nbsp;·&nbsp; Pinal County, AZ &nbsp;·&nbsp; Permit PER25-08870 &nbsp;·&nbsp; ROC 365485</div>
+  </div>
+  <div class="meta-fields">
+    <div class="mf"><label>Client</label><input id="f-client" type="text" value="Dillenburg" /></div>
+    <div class="mf"><label>Meeting date</label><input id="f-date" type="date" /></div>
+    <div class="mf"><label>Stage</label><input id="f-stage" type="text" value="Framing" /></div>
+  </div>
+</div>
+
+<div class="prog-strip">
+  <div class="prog-label">Selections complete</div>
+  <div class="prog-track"><div class="prog-fill" id="pfill"></div></div>
+  <div class="prog-pct" id="ppct">0 of 0</div>
+</div>
+
+<div class="tabs-bar" id="tabs"></div>
+
+<div class="main">
+  <div id="panels"></div>
+  <div class="export-bar">
+    <div class="export-note">Export a plain-text spec sheet for ordering or client records.</div>
+    <button class="export-btn" onclick="doExport()">Export spec sheet</button>
+  </div>
+  <div id="export-out"></div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-brand">MILLHOUSE &nbsp;·&nbsp; A Family Company</div>
+  <div class="footer-info">hello@millhousebuilt.com &nbsp;·&nbsp; 602.901.6044 &nbsp;·&nbsp; ROC 365485</div>
+</footer>
+
+<script>
+// ── DATA ────────────────────────────────────────────────────
+const D=[
+{id:"exterior",label:"Exterior",desc:"Envelope, materials, and first impressions.",items:[
+{id:"ext-stone",name:"Stone veneer — front facade",note:"Per approved elevations: stone veneer on front elevation only. Mortar type S required per plans.",s:["Stone color / name","Stone style (ledger / ashlar / stacked)","Mortar color","Brand","SKU / order ref","Notes"]},
+{id:"ext-siding",name:"Hardboard siding — front elevation",note:"Per plans: ICC-ESR-1844.",s:["Profile (lap / board & batten / panel)","Color / paint","Exposure width","Brand","Notes"]},
+{id:"ext-stucco",name:"Stucco — rear and side elevations",note:"Per plans: Western One Kote ICC ESR-2022 specified. Must use this or approved equal.",s:["Color","Texture (smooth / sand / dash / skip trowel)","Brand","Notes"]},
+{id:"ext-roof",name:"Roof — asphalt shingles + flat section",note:"Per plans: ESR-1389 over 15# felt / 1/2\" OSB. 4:12 main pitch, 5:12 entry gable. Modified bitumen on 1/2:12 flat section (ESR-2018).",s:["Color / name","Flat section membrane brand","Brand","Notes"]},
+{id:"ext-garage",name:"Garage doors — qty 3",note:"Per electrical plan: 3 doors shown. Confirm exact opening sizes from framing.",s:["Style","Width × Height (each door)","Color / finish","Motor brand","Qty: 3","Notes"]},
+{id:"ext-entry",name:"Front entry door",note:"Per security specs on plans: solid core or metal skin, 1\" deadbolt, 180° viewer required.",s:["Material","Size (W × H)","Style / profile","Exterior color","Hardware finish","Sidelites?","Brand","Notes"]},
+{id:"ext-windows",name:"Windows — whole home",note:"Per energy notes: SHGC ≤ 0.25, U-factor ≤ 0.40 required. Many sizes on plan: 3060SH, 8060TS, 6080, 6060LS, 5050FX, 3030FX, 2060SH, 3050SH.",s:["Frame material","Exterior frame color","Interior frame color","Screen type","Brand","Notes"]},
+{id:"ext-garage-ltg",name:"Garage exterior lights — qty 4",note:"Per garage plans: 4 exterior lights on garage elevation.",s:["Style","Finish","Brand","Model / SKU","Qty: 4","Notes"]},
+{id:"ext-spots",name:"Exterior spotlights — qty 2",note:"Per electrical plan: 2 dual spotlights on house exterior.",s:["Style","Finish","Brand","Model / SKU","Qty: 2","Notes"]},
+{id:"ext-recessed",name:"Exterior recessed lights — qty 2",note:"Per electrical plan: 2 exterior recessed lights on house.",s:["Style","Finish (WP / damp-rated)","Brand","Model / SKU","Qty: 2","Notes"]},
+{id:"ext-fans",name:"Exterior ceiling fans",note:"Covered porch and patio areas — confirm locations with client.",s:["Style","Finish","Blade span","Brand","Model / SKU","Qty","Notes"]}
+]},
+{id:"kitchen",label:"Kitchen",desc:"The room the house is built around.",items:[
+{id:"k-cab",name:"Kitchen cabinets — full height per plans",note:"Per floor plan: FULL HEIGHT CAB noted. 10' ceilings — stacked uppers or full-height slab doors both work beautifully.",s:["Door style","Finish / color","Box material","Upper height (to 10' ceiling?)","Crown molding?","Hardware finish","Brand","Notes"]},
+{id:"k-cnt",name:"Kitchen countertops — perimeter",note:"Perimeter countertops. Coordinate with island, backsplash, and cabinet finish.",s:["Material","Color / slab name","Edge profile","Thickness","Approx sq ft","Brand","Notes"]},
+{id:"k-isl",name:"Kitchen island countertop",note:"Island shown on floor plan. Confirm waterfall vs. standard edge.",s:["Material (match or contrast perimeter?)","Color / slab name","Edge profile","Waterfall sides?","Approx sq ft","Brand","Notes"]},
+{id:"k-bt",name:"Kitchen backsplash",note:"Full height behind range recommended. Ties to counter and cabinet finish.",s:["Material","Size","Color / SKU","Grout color","Full height or standard?","Brand","Notes"]},
+{id:"k-fl",name:"Kitchen floor",note:"Connects to dining and entry visually — coordinate material choices.",s:["Material","Size","Color / SKU","Grout color","Brand","Notes"]},
+{id:"k-sink",name:"Kitchen sink",note:"Per waste ISO: 1 kitchen sink confirmed.",s:["Mount type","Material","Basins (single / double)","Finish / color","Brand","Model / SKU","Notes"]},
+{id:"k-fct",name:"Kitchen faucet",note:"Pull-down standard. Touchless optional.",s:["Finish","Style (pull-down / pull-out)","Touchless?","Brand","Model / SKU","Notes"]},
+{id:"k-range",name:"Gas range",note:"Per plans: GAS noted at range location. Gas schematic: 50,000 BTU. Electrical plan shows 50 AMP circuit (dual-fuel option possible).",s:["Width (30\" / 36\" / 48\")","Fuel type (gas / dual-fuel)","Burner count","Color / finish","Brand","Model / SKU","Notes"]},
+{id:"k-hood",name:"Range hood",note:"⚠ Duct run must be confirmed during framing NOW. Per energy code M1503.6: hoods over 400 CFM require makeup air.",s:["Width (match range)","CFM","Style (wall / island / insert)","Finish","Duct size — confirm with HVAC now","Brand","Model / SKU","Notes"]},
+{id:"k-ref",name:"Refrigerator",note:"Per electrical plan: REF w/ ice line shown.",s:["Width","Built-in or freestanding","Finish","Configuration","Brand","Model / SKU","Notes"]},
+{id:"k-dw",name:"Dishwasher",note:"Panel-ready strongly recommended for seamless cabinet look.",s:["Panel-ready?","Finish","Brand","Model / SKU","Notes"]},
+{id:"k-micro",name:"Microwave",note:"Built-in or drawer. No over-range — separate hood.",s:["Type (drawer / built-in)","Finish","Brand","Model / SKU","Notes"]},
+{id:"k-ltg",name:"Kitchen lighting — pendants + recessed",note:"Per electrical plan: recessed throughout kitchen, island pendant positions shown. 10' ceiling.",s:["Island pendant style","Pendant finish","Pendant qty","Recessed qty (approx)","Brand","Notes"]}
+]},
+{id:"mbath",label:"Master Bath",desc:"Where the quiet decisions live.",items:[
+{id:"mb-fl",name:"Master bath floor tile",note:"10' ceiling bath. Radiant heat option worth discussing.",s:["Material","Size","Color / SKU","Grout color","Heated floor (Nuheat)?","Brand","Sq ft approx: ~120","Notes"]},
+{id:"mb-sh",name:"Master shower wall + floor tile",note:"Per plans: tile to 6' min, prefab pan. Per code: smooth hard surface to 72\" required.",s:["Wall tile material","Wall tile size","Wall tile Color / SKU","Wall grout color","Floor tile material","Floor tile size","Floor tile Color / SKU","Floor grout color","Niche accent tile","Brand","Sq ft wall approx","Notes"]},
+{id:"mb-cnt",name:"Master bath countertop — double vanity",note:"Double sink vanity. Bath approx 13'4\" × 9'4\".",s:["Material","Color / slab name","Edge profile","Brand","Sq ft approx","Notes"]},
+{id:"mb-cab",name:"Master bath vanity cabinet",note:"Double vanity. Match or complement kitchen cabinets.",s:["Width (total)","Door style","Finish","Hardware finish","Brand","Notes"]},
+{id:"mb-tub",name:"Freestanding soaking tub",note:"⚠ Confirm rough-in location during framing NOW. Floor-mount filler needs blocking in subfloor.",s:["Material","Shape","Length (confirm clearances)","Filler type (floor-mount / wall-mount)","Color / finish","Brand","Model / SKU","Notes"]},
+{id:"mb-filler",name:"Freestanding tub filler",note:"Match finish to all other master bath fixtures.",s:["Mount type","Finish","Brand","Model / SKU","Notes"]},
+{id:"mb-shower",name:"Master shower system",note:"Per electrical plan: R&SH shown. Thermostatic valve recommended.",s:["Valve type (thermostatic / pressure-balance)","Showerhead style","Handheld?","Body sprays?","Finish","Brand","Model / SKU","Notes"]},
+{id:"mb-fct",name:"Master bath faucets — qty 2",note:"Two sinks. Match finish throughout master bath.",s:["Mount type (widespread / centerset)","Finish","Brand","Model / SKU","Qty: 2","Notes"]},
+{id:"mb-toilet",name:"Master W.C. toilet — qty 1",note:"Per floor plan: separate W.C. room. 30\" min clearance required.",s:["Style (one-piece / two-piece / wall-hung)","Finish","Washlet / bidet seat?","Brand","Model / SKU","Notes"]},
+{id:"mb-mirrors",name:"Master bath mirrors — qty 2",note:"One over each vanity sink.",s:["Style (framed / frameless / lit)","Width each","Height each","Finish","Brand","Notes"]},
+{id:"mb-ltg",name:"Master bath lighting — vanity + ambient",note:"Per electrical plan: vanity bar lights shown, recessed throughout. 10' ceiling.",s:["Vanity bar or flanking sconces?","Finish","Brand","Qty fixtures: 2","Notes"]}
+]},
+{id:"baths",label:"Hall Bath + 2nd Bath",desc:"Secondary baths — 1st floor and 2nd floor.",items:[
+{id:"hb-fl",name:"1st floor hall bath — floor tile",note:"Serving Beds 2 & 3. Approx 7'8\" × 8'4\".",s:["Material","Tile size","Color / SKU","Grout color","Brand","Sq ft approx: ~64","Notes"]},
+{id:"hb-sh",name:"1st floor hall bath — shower tile",note:"Per plans: tile to 6' min, prefab pan. R&SH noted.",s:["Wall tile material","Wall tile size","Wall tile Color / SKU","Wall grout color","Floor tile Color / SKU","Floor grout color","Brand","Pan: prefab fiberglass or tile base?","Notes"]},
+{id:"hb-van",name:"1st floor hall bath — vanity, counter, faucet",note:"Single vanity approx 30–36\" wide.",s:["Vanity width","Door style","Finish","Counter material","Hardware","Faucet finish","Brand","Model / SKU","Notes"]},
+{id:"hb-toilet",name:"1st floor hall bath — toilet",note:"Per waste ISO: W.C. confirmed.",s:["Style","Finish","Brand","Model / SKU","Notes"]},
+{id:"hb-ltg",name:"1st floor hall bath — lighting",note:"Per electrical plan: vanity bar light shown.",s:["Style","Finish","Brand","Model / SKU","Notes"]},
+{id:"ub-fl",name:"2nd floor bath — floor tile",note:"Serving Bed 4 and Loft. Approx 5' × 5'. 9' ceiling.",s:["Material","Tile size","Color / SKU","Grout color","Brand","Notes"]},
+{id:"ub-sh",name:"2nd floor bath — shower tile",note:"Per plans: tile to 6' min, prefab pan noted on 2nd floor.",s:["Wall tile material","Wall tile size","Wall tile Color / SKU","Wall grout color","Floor tile Color / SKU","Floor grout color","Brand","Pan: prefab or tile base?","Notes"]},
+{id:"ub-van",name:"2nd floor bath — vanity, counter, faucet",note:"Single vanity. Total bath approx 5' × 10'6\".",s:["Width","Finish","Counter material","Hardware","Faucet finish","Brand","Model / SKU","Notes"]},
+{id:"ub-toilet",name:"2nd floor bath — toilet",note:"",s:["Style","Finish","Brand","Model / SKU","Notes"]},
+{id:"ub-ltg",name:"2nd floor bath — lighting",note:"Per electrical plan: vanity bar light shown.",s:["Style","Finish","Brand","Model / SKU","Notes"]}
+]},
+{id:"floors",label:"Flooring",desc:"Every surface underfoot — room by room.",items:[
+{id:"fl-main",name:"Entry, living room, dining room, hallways",note:"All 10' ceilings, open to each other visually — one material strongly recommended.",s:["Material (hardwood / LVP / large tile)","Species or product name","Width","Color / SKU","Brand","Approx sq ft","Notes"]},
+{id:"fl-beds",name:"Master bedroom, Bedrooms 2, 3, 4",note:"Master: ~15'×17'6\". Beds 2&3: ~12'×12' ea. Bed 4: ~13'×15'.",s:["Material","Color / SKU","Brand","Master Bed sq ft: ~263","Beds 2+3: ~144 SF ea","Bed 4: ~195 SF","Notes"]},
+{id:"fl-loft",name:"Loft — 2nd floor, approx 217 SF",note:"Per floor plan: Loft 13'8\" × 15'10\". Open concept — visible from below if open railing.",s:["Material","Color / SKU","Brand","Sq ft: ~217","Notes"]},
+{id:"fl-study",name:"Study — approx 138 SF",note:"Per floor plan: Study 8'8\" × 15'10\". Off entry.",s:["Material","Color / SKU","Brand","Sq ft: ~138","Notes"]},
+{id:"fl-laundry",name:"Laundry room — approx 72 SF",note:"7'8\" × 9'4\".",s:["Material","Tile size","Color / SKU","Grout color","Brand","Sq ft: ~72","Notes"]},
+{id:"fl-pantry",name:"Pantry — approx 137 SF",note:"Dedicated pantry room, 10'6\" × 13'.",s:["Material","Tile size","Color / SKU","Brand","Notes"]},
+{id:"fl-closets",name:"Master closet + bedroom closets",note:"Master closet is a dedicated room, 15' × 4'.",s:["Material","Color / SKU","Brand","Notes"]}
+]},
+{id:"lighting",label:"Lighting",desc:"The fixtures that give the house its light and mood.",items:[
+{id:"lt-entry",name:"Entry — lantern + recessed",note:"Per electrical plan: lantern symbol at front door, recessed in entry. 10' ceiling.",s:["Lantern style","Lantern finish","Brand","Recessed qty (~2–3)","Notes"]},
+{id:"lt-living",name:"Living room — recessed (approx 10 fixtures)",note:"Per electrical plan: ~10 recessed lights in living room. 10' ceiling. Dimmer required.",s:["Trim style","Size (4\" or 6\")","Color temp (2700K warm rec.)","Brand","Qty: ~10","Dimmer brand","Notes"]},
+{id:"lt-dining",name:"Dining room — chandelier (5-light per plans)",note:"Per electrical plan: 5-LIGHT CHANDELIER symbol explicitly shown. 10' ceiling.",s:["Style","Diameter","Finish","Drop length","Brand","Model / SKU","Notes"]},
+{id:"lt-kitchen",name:"Kitchen — island pendants + recessed",note:"Per electrical plan: recessed throughout, island pendant positions shown. 10' ceiling.",s:["Island pendant style","Pendant finish","Pendant qty","Brand","Recessed qty (~8–10)","Notes"]},
+{id:"lt-master",name:"Master bedroom — ceiling fan",note:"Per electrical plan: ceiling fan symbol in master bedroom. 10' ceiling.",s:["Fan or fixture?","Style","Finish","Blade span","Brand","Notes"]},
+{id:"lt-beds",name:"Bedrooms 2, 3, 4 + Loft — ceiling fans",note:"Per electrical plan: ceiling fan symbols in Beds 2, 3, and Loft. Bed 4 same.",s:["Style","Finish","Blade span","Brand","Qty: 4 (Beds 2 / 3 / 4 + Loft)","Notes"]},
+{id:"lt-study",name:"Study — lighting",note:"Per electrical plan: recessed lights in study. 10' ceiling.",s:["Style (recessed or statement fixture?)","Finish","Brand","Qty","Notes"]},
+{id:"lt-porch",name:"Front porch — lantern + kick lights",note:"Per electrical plan: porch lantern, kick lights, under-eave. WP required.",s:["Porch lantern style","Finish","Kick light style","Brand","Qty lanterns","Qty kick lights","Notes"]},
+{id:"lt-patio",name:"Rear patio — recessed + kick lights",note:"Per electrical plan: recessed (WP) and kick lights at covered patio. 368 SF.",s:["Recessed style (WP / damp-rated)","Kick light style","Brand","Qty recessed","Qty kick lights","Notes"]},
+{id:"lt-balcony",name:"Balcony — 2nd floor, 104 SF",note:"Per electrical plan: recessed + WP outlet on balcony.",s:["Style","Finish","Brand","Qty","Notes"]},
+{id:"lt-system",name:"Whole-home recessed system",note:"Per code N1104.1: 90% of permanent fixtures must be high-efficacy. IC-rated air-tight (ICAT) required.",s:["Trim style (baffle / reflector / lens)","Size (4\" or 6\")","Color temp — all rooms","Brand","Dimmer brand","Notes"]}
+]},
+{id:"laundry",label:"Laundry & Closets",desc:"The rooms that keep everything else running.",items:[
+{id:"lau-cab",name:"Laundry cabinetry — 7'8\" × 9'4\" room",note:"Upper and lower cabinets with utility sink.",s:["Style","Finish","Configuration (upper / lower / open shelves)","Brand","Notes"]},
+{id:"lau-sink",name:"Laundry utility sink",note:"Per waste ISO: utility sink confirmed.",s:["Material","Mount type","Finish / color","Brand","Model / SKU","Notes"]},
+{id:"lau-fct",name:"Laundry utility faucet",note:"",s:["Style","Finish","Brand","Model / SKU","Notes"]},
+{id:"lau-wash",name:"Washer",note:"Front-load preferred for stacking or side-by-side.",s:["Stack or side-by-side","Finish","Brand","Model / SKU","Notes"]},
+{id:"lau-dry",name:"Dryer",note:"Per electrical plan: 220 DISC shown. Gas dryer option available — gas stub shown on plans.",s:["Stack or side-by-side","Fuel (gas or electric)","Finish","Brand","Model / SKU","Notes"]},
+{id:"mc-closet",name:"Master closet system — 15' × 4'",note:"Per floor plan: dedicated room. R&SH (rod & shelf) noted.",s:["Style","Material / finish","Double hang sections?","Drawer qty","Shoe shelving?","Brand","Notes"]},
+{id:"pantry-sh",name:"Pantry shelving — 10'6\" × 13'",note:"Dedicated pantry room. Full-height shelving.",s:["Style (wire / wood / melamine)","Shelf depth","Configuration","Brand","Notes"]}
+]},
+{id:"millwork",label:"Doors & Millwork",desc:"The details that give a home its character.",items:[
+{id:"int-dr",name:"Interior doors — whole home",note:"Per floor plan: multiple sizes noted (2880, 3080, 2680, 2468, 3090, etc.). Solid core standard.",s:["Style","Material","Standard width","Paint or stain","Brand","Notes"]},
+{id:"int-hw",name:"Interior door hardware — whole home",note:"One finish for the entire home.",s:["Style (lever / knob)","Finish","Brand","Model / SKU","Notes"]},
+{id:"stair",name:"Stair railing + balustrade",note:"Per plans: 36\" min guardrail required. 4\" max baluster spacing.",s:["Style","Material","Newel post style","Baluster style","Handrail finish","Loft / balcony guard to match?","Brand","Notes"]},
+{id:"trim",name:"Baseboard + door casing — whole home",note:"10' ceilings — taller baseboard looks proportional. 5\"–7\" height recommended.",s:["Baseboard height","Baseboard profile","Casing style","Paint or stain","Brand","Notes"]},
+{id:"fireplace",name:"Fireplace surround + mantle — Isokern M36OD",note:"Per plans: ISOKERN M36OD (ICC ESR-2316), direct vent gas. Shutoff within 4' required. 18\" hearth per plans.",s:["Surround material","Surround color / finish","Hearth material","Mantle material / finish","Hearth depth: 18\" per plans","Notes"]}
+]},
+{id:"paint",label:"Paint & Grout",desc:"Color and texture — the finish that ties everything together.",items:[
+{id:"pt-int",name:"Interior paint — walls, trim, ceilings",note:"10' ceilings make color very prominent. Trim color is a major decision throughout the home.",s:["Main wall color","Accent wall color(s)","Trim / baseboard color","Ceiling color","Wall sheen","Trim sheen","Brand","Notes"]},
+{id:"pt-ext",name:"Exterior paint — stucco, siding, trim, door",note:"Coordinate all exterior colors with stone veneer selected in the Exterior tab.",s:["Stucco body color","Hardboard siding color","Exterior trim color","Front door color","Garage door color","Brand","Notes"]},
+{id:"grout",name:"Grout colors — all tile locations",note:"Best decided in one session for whole-home coordination.",s:["Kitchen backsplash grout","Kitchen floor grout","Master bath floor grout","Master shower wall grout","Master shower floor grout","Hall bath floor grout","Hall bath shower grout","2nd floor bath floor grout","2nd floor bath shower grout","Grout brand — whole home","Notes"]}
+]}
+];
+
+// ── PRE-LOADED DATA FROM EXPORT ──────────────────────────────
+const PRELOAD = {
+  meta: { client: "Dillenburg", date: "2026-06-01", stage: "Framing" },
+  state: {
+    "ext-stone":    { status:"pending",  fields:{ "Stone color / name":"Sonoma White", "Stone style (ledger / ashlar / stacked)":"4, 6, 8", "SKU / order ref":"Arizona Stone" } },
+    "ext-stucco":   { status:"pending",  fields:{ "Texture (smooth / sand / dash / skip trowel)":"Smooth" } },
+    "ext-roof":     { status:"pending",  fields:{ "Color / name":"Dual black or charcoal" } },
+    "ext-garage":   { status:"pending",  fields:{ "Notes":"offer options" } },
+    "ext-entry":    { status:"pending",  fields:{ "Hardware finish":"black", "Notes":"ordered" } },
+    "ext-windows":  { status:"pending",  fields:{ "Notes":"ordered" } },
+    "k-cab":        { status:"selected", fields:{ "Notes":"crown molding - nicer than the rest of the house" } },
+    "k-cnt":        { status:"selected", fields:{ "Material":"Quartz", "Color / slab name":"Valbella Grey", "Brand":"Arizona Tile" } },
+    "k-isl":        { status:"pending",  fields:{ "Color / slab name":"Artemis", "Brand":"Arizona Tile" } },
+    "k-bt":         { status:"selected", fields:{ "Notes":"full backsplash" } },
+    "k-fl":         { status:"selected", fields:{ "Color / SKU":"Big Sur / 101069698", "Grout color":"N/A", "Brand":"Floor and Decor" } },
+    "mb-sh":        { status:"pending",  fields:{ "Notes":"floor tile - round and smooth" } },
+    "mb-tub":       { status:"pending",  fields:{ "Color / finish":"Clarke" } },
+    "mb-toilet":    { status:"selected", fields:{ "Notes":"toto" } },
+    "fl-main":      { status:"selected", fields:{ "Species or product name":"Big Sur / 101069698", "Color / SKU":"Big Sur / 101069698" } },
+    "fl-beds":      { status:"selected", fields:{ "Notes":"master and bed 3 and 4 - carpet" } },
+    "fl-loft":      { status:"selected", fields:{ "Material":"LVP" } },
+    "fl-study":     { status:"pending",  fields:{ "Material":"LVP" } },
+    "fl-laundry":   { status:"selected", fields:{ "Material":"Tile" } },
+    "fl-pantry":    { status:"pending",  fields:{ "Material":"LVP" } },
+    "fl-closets":   { status:"selected", fields:{ "Material":"LVP", "Notes":"carpet closets except master" } },
+    "lt-entry":     { status:"selected", fields:{} },
+    "lt-porch":     { status:"pending",  fields:{ "Notes":"Add exterior sconces?" } },
+  }
+};
+
+// ── STATE ────────────────────────────────────────────────────
+const ST = {};
+D.forEach(s => s.items.forEach(i => { ST[i.id] = { status:"pending", fields:{} }; }));
+
+const STORAGE_KEY = "millhouse_dillenburg_cloud_v1";
+let saveTimer = null;
+
+function total() { return D.reduce((a,s)=>a+s.items.length,0); }
+function doneCount() { return Object.values(ST).filter(v=>v.status==="selected").length; }
+
+function prog() {
+  const n=doneCount(), t=total(), p=Math.round(n/t*100);
+  document.getElementById("pfill").style.width=p+"%";
+  document.getElementById("ppct").textContent=n+" of "+t;
+  document.querySelectorAll("[data-tdot]").forEach(el=>{
+    const sec=D.find(s=>s.id===el.dataset.tdot);
+    el.classList.toggle("done", sec&&sec.items.every(i=>ST[i.id].status==="selected"));
+  });
+}
+
+function setS(id, st) {
+  ST[id].status = st;
+  const card = document.querySelector(`[data-card="${id}"]`);
+  const b = card.querySelector(".badge");
+  b.textContent = st==="selected"?"Selected":st==="na"?"N/A":"Pending";
+  b.className = "badge "+st;
+  card.classList.toggle("sel", st==="selected");
+  prog();
+  scheduleSave();
+}
+
+// ── SAVE / LOAD ──────────────────────────────────────────────
+function scheduleSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveAll, 800);
+}
+
+async function saveAll() {
+  const meta = {
+    client: document.getElementById("f-client").value,
+    date:   document.getElementById("f-date").value,
+    stage:  document.getElementById("f-stage").value
+  };
+  const payload = JSON.stringify({ meta, state: ST, ts: Date.now() });
+
+  // Try cloud storage first
+  let savedToCloud = false;
+  try {
+    const res = await window.storage.set(STORAGE_KEY, payload, true);
+    if (res) savedToCloud = true;
+  } catch(e) {}
+
+  // Always also save to localStorage as fallback
+  try { localStorage.setItem(STORAGE_KEY, payload); } catch(e) {}
+
+  showSynced(savedToCloud);
+}
+
+function showSynced(cloud) {
+  const el = document.getElementById("sync-status");
+  el.textContent = cloud ? "Saved to cloud" : "Saved locally";
+  el.classList.add("show");
+  clearTimeout(el._t);
+  el._t = setTimeout(()=>el.classList.remove("show"), 3000);
+}
+
+async function loadAll() {
+  let saved = null;
+
+  // Try cloud first
+  try {
+    const res = await window.storage.get(STORAGE_KEY, true);
+    if (res && res.value) saved = JSON.parse(res.value);
+  } catch(e) {}
+
+  // Fall back to localStorage
+  if (!saved) {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) saved = JSON.parse(raw);
+    } catch(e) {}
+  }
+
+  // Fall back to preloaded data from export
+  if (!saved) saved = PRELOAD;
+
+  applyData(saved);
+}
+
+function applyData(saved) {
+  if (saved.meta) {
+    if (saved.meta.client) document.getElementById("f-client").value = saved.meta.client;
+    if (saved.meta.date)   document.getElementById("f-date").value   = saved.meta.date;
+    if (saved.meta.stage)  document.getElementById("f-stage").value  = saved.meta.stage;
+  }
+  if (saved.state) {
+    Object.keys(saved.state).forEach(id => { if (ST[id]) ST[id] = saved.state[id]; });
+  }
+  // Apply to DOM
+  Object.keys(ST).forEach(id => {
+    const st = ST[id].status;
+    const card = document.querySelector(`[data-card="${id}"]`);
+    if (!card) return;
+    const b = card.querySelector(".badge");
+    b.textContent = st==="selected"?"Selected":st==="na"?"N/A":"Pending";
+    b.className = "badge "+st;
+    card.classList.toggle("sel", st==="selected");
+  });
+  document.querySelectorAll("input[type=text][data-item], textarea[data-item]").forEach(inp => {
+    const val = ST[inp.dataset.item]?.fields?.[inp.dataset.spec];
+    if (val !== undefined) inp.value = val;
+  });
+  prog();
+}
+
+// ── BUILD UI ─────────────────────────────────────────────────
+function build() {
+  const nav = document.getElementById("tabs");
+  const wrap = document.getElementById("panels");
+  D.forEach((sec, si) => {
+    const btn = document.createElement("button");
+    btn.className = "tab" + (si===0?" active":"");
+    btn.innerHTML = `<span class="tdot" data-tdot="${sec.id}"></span>${sec.label}`;
+    btn.onclick = () => {
+      document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));
+      document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById("p-"+sec.id).classList.add("active");
+    };
+    nav.appendChild(btn);
+
+    const pnl = document.createElement("div");
+    pnl.className = "panel" + (si===0?" active":"");
+    pnl.id = "p-"+sec.id;
+    const intro = document.createElement("div");
+    intro.className = "section-intro";
+    intro.innerHTML = `<div class="section-label">${sec.label}</div><div class="section-desc">${sec.desc}</div>`;
+    pnl.appendChild(intro);
+
+    sec.items.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "card"; card.dataset.card = item.id;
+
+      const top = document.createElement("div"); top.className = "card-top";
+      const nb = document.createElement("div");
+      nb.innerHTML = `<div class="item-name">${item.name}</div>${item.note?`<div class="item-note">${item.note}</div>`:""}`;
+      const badge = document.createElement("span"); badge.className = "badge pending"; badge.textContent = "Pending";
+      top.appendChild(nb); top.appendChild(badge); card.appendChild(top);
+
+      // 3 recommendation fields
+      const recGrid = document.createElement("div"); recGrid.className = "rec-grid";
+      ["Recommendation 1","Recommendation 2","Recommendation 3"].forEach(lbl => {
+        const sf = document.createElement("div"); sf.className = "sf";
+        const l = document.createElement("label"); l.textContent = lbl;
+        const inp = document.createElement("input"); inp.type = "text";
+        inp.dataset.item = item.id; inp.dataset.spec = lbl;
+        inp.addEventListener("input", () => { ST[item.id].fields[lbl]=inp.value; scheduleSave(); });
+        sf.appendChild(l); sf.appendChild(inp); recGrid.appendChild(sf);
+      });
+      card.appendChild(recGrid);
+
+      // spec fields
+      const cols = Math.min(item.s.length, 4);
+      const sg = document.createElement("div"); sg.className = "spec-grid";
+      sg.style.gridTemplateColumns = `repeat(${cols},minmax(0,1fr))`;
+      item.s.forEach(spec => {
+        const sf = document.createElement("div"); sf.className = "sf";
+        const lbl = document.createElement("label"); lbl.textContent = spec;
+        const isN = spec.toLowerCase().includes("note");
+        let inp;
+        if (isN) { inp = document.createElement("textarea"); }
+        else { inp = document.createElement("input"); inp.type = "text"; }
+        inp.dataset.item = item.id; inp.dataset.spec = spec;
+        inp.addEventListener("input", () => { ST[item.id].fields[spec]=inp.value; scheduleSave(); });
+        sf.appendChild(lbl); sf.appendChild(inp); sg.appendChild(sf);
+      });
+      card.appendChild(sg);
+
+      const acts = document.createElement("div"); acts.className = "actions";
+      [["Mark selected","selected","pri"],["Reset","pending",""],["Not applicable","na",""]].forEach(([lbl,st,cls]) => {
+        const b = document.createElement("button");
+        b.className = "btn"+(cls?" "+cls:""); b.textContent = lbl;
+        b.onclick = () => setS(item.id, st);
+        acts.appendChild(b);
+      });
+      card.appendChild(acts);
+      pnl.appendChild(card);
+    });
+    wrap.appendChild(pnl);
+  });
+}
+
+// ── EXPORT ───────────────────────────────────────────────────
+function doExport() {
+  saveAll();
+  const client = document.getElementById("f-client").value || "Dillenburg";
+  const date   = document.getElementById("f-date").value   || "—";
+  const stage  = document.getElementById("f-stage").value  || "—";
+  let out = "MILLHOUSE · MATERIAL SELECTIONS\n";
+  out += "Dillenburg Residence · Permit PER25-08870 · Pinal County AZ\n";
+  out += `Client: ${client} · Date: ${date} · Stage: ${stage}\n`;
+  out += `Completion: ${doneCount()} of ${total()} items selected\n`;
+  out += "─".repeat(56)+"\n\n";
+  D.forEach(sec => {
+    out += sec.label.toUpperCase()+"\n"+"─".repeat(40)+"\n";
+    sec.items.forEach(item => {
+      const s = ST[item.id];
+      out += `\n  ${item.name}\n  Status: ${s.status.toUpperCase()}\n`;
+      item.s.forEach(sp => { out += `  ${sp}: ${s.fields[sp]||"—"}\n`; });
+    });
+    out += "\n";
+  });
+  const el = document.getElementById("export-out");
+  el.style.display = "block"; el.textContent = out;
+  el.scrollIntoView({ behavior:"smooth" });
+}
+
+// ── INIT ─────────────────────────────────────────────────────
+["f-client","f-date","f-stage"].forEach(id => {
+  document.getElementById(id).addEventListener("input", scheduleSave);
+});
+
+build();
+loadAll().then(() => {
+  document.getElementById("loader").classList.add("hidden");
+});
+</script>
+</body>
+</html>
