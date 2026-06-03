@@ -90,7 +90,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 .pin-key.empty { border:none; background:transparent; cursor:default; pointer-events:none; }
 .pin-error { font-size:11px; color:#c0392b; font-style:italic; margin-top:1rem; opacity:0; transition:opacity .2s; }
 .pin-error.show { opacity:1; }
-</style>
+
+/* Prevent scrolling while PIN gate is up */
+body.pin-locked { overflow: hidden; }
 
 .site-header { border-bottom: 1px solid var(--border); padding: 0 2.5rem; display: flex; align-items: center; justify-content: space-between; height: 56px; background: var(--cream); position: sticky; top: 0; z-index: 100; }
 .wordmark { font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 13px; letter-spacing: .2em; text-transform: uppercase; color: var(--ink); text-decoration: none; }
@@ -206,35 +208,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
   </div>
   <div class="pin-error" id="pin-error">Incorrect code — try again.</div>
 </div>
-
-<!-- PIN GATE -->
-<div class="pin-gate" id="pin-gate">
-  <div class="pin-wordmark">MILLHOUSE</div>
-  <div class="pin-title">Dillenburg Residence</div>
-  <div class="pin-sub">Enter your access code to continue.</div>
-  <div class="pin-dots" id="pin-dots">
-    <div class="pin-dot" id="pd0"></div>
-    <div class="pin-dot" id="pd1"></div>
-    <div class="pin-dot" id="pd2"></div>
-    <div class="pin-dot" id="pd3"></div>
-  </div>
-  <div class="pin-keypad">
-    <button class="pin-key" onclick="pinPress('1')">1</button>
-    <button class="pin-key" onclick="pinPress('2')">2</button>
-    <button class="pin-key" onclick="pinPress('3')">3</button>
-    <button class="pin-key" onclick="pinPress('4')">4</button>
-    <button class="pin-key" onclick="pinPress('5')">5</button>
-    <button class="pin-key" onclick="pinPress('6')">6</button>
-    <button class="pin-key" onclick="pinPress('7')">7</button>
-    <button class="pin-key" onclick="pinPress('8')">8</button>
-    <button class="pin-key" onclick="pinPress('9')">9</button>
-    <button class="pin-key empty"></button>
-    <button class="pin-key" onclick="pinPress('0')">0</button>
-    <button class="pin-key del" onclick="pinDel()">&#9003;</button>
-  </div>
-  <div class="pin-error" id="pin-error">Incorrect code — try again.</div>
-</div>
-
 
 <div class="loading-screen" id="loader">
   <div class="loading-wordmark">MILLHOUSE</div>
@@ -657,85 +630,96 @@ function scheduleSave(){
 
 
 // ── PIN GATE ────────────────────────────────────────────────
+// Note: This is a soft gate — the PIN is visible in source and is not
+// a substitute for real authentication. Use Supabase RLS for real security.
 const PIN = "4469";
+const UNLOCK_KEY = "mh_unlocked_" + PROJECT_ID;
 let pinEntry = "";
+let pinLocked = false; // true while we're showing the error animation
+let appStarted = false;
+
+function updateDots() {
+  for (let i = 0; i < 4; i++) {
+    const d = document.getElementById("pd" + i);
+    if (!d) continue;
+    d.classList.toggle("filled", i < pinEntry.length);
+    d.classList.remove("error");
+  }
+}
 
 function pinPress(d) {
+  if (pinLocked) return;
   if (pinEntry.length >= 4) return;
   pinEntry += d;
-  for (let i = 0; i < 4; i++) {
-    const dot = document.getElementById("pd" + i);
-    dot.classList.toggle("filled", i < pinEntry.length);
-    dot.classList.remove("error");
-  }
-  if (pinEntry.length === 4) {
-    setTimeout(function() {
-      if (pinEntry === PIN) {
-        document.getElementById("pin-gate").classList.add("hidden");
-      } else {
-        for (let i = 0; i < 4; i++) document.getElementById("pd" + i).classList.add("error");
-        document.getElementById("pin-error").classList.add("show");
-        setTimeout(function() {
-          pinEntry = "";
-          for (let i = 0; i < 4; i++) {
-            document.getElementById("pd" + i).classList.remove("filled","error");
-          }
-          document.getElementById("pin-error").classList.remove("show");
-        }, 800);
-      }
-    }, 120);
-  }
+  updateDots();
+  document.getElementById("pin-error").classList.remove("show");
+  if (pinEntry.length === 4) setTimeout(checkPin, 120);
 }
 
 function pinDel() {
+  if (pinLocked) return;
   if (pinEntry.length === 0) return;
   pinEntry = pinEntry.slice(0, -1);
-  for (let i = 0; i < 4; i++) {
-    document.getElementById("pd" + i).classList.toggle("filled", i < pinEntry.length);
-  }
+  updateDots();
   document.getElementById("pin-error").classList.remove("show");
 }
 
-build();
-  loadAll().then(()=>{
+function checkPin() {
+  if (pinEntry === PIN) {
+    try { sessionStorage.setItem(UNLOCK_KEY, "1"); } catch(e){}
+    unlockApp();
+  } else {
+    pinLocked = true;
+    for (let i = 0; i < 4; i++) {
+      const d = document.getElementById("pd" + i);
+      if (d) d.classList.add("error");
+    }
+    document.getElementById("pin-error").classList.add("show");
+    setTimeout(() => {
+      pinEntry = "";
+      updateDots();
+      document.getElementById("pin-error").classList.remove("show");
+      pinLocked = false;
+    }, 800);
+  }
+}
+
+function unlockApp() {
+  document.getElementById("pin-gate").classList.add("hidden");
+  document.body.classList.remove("pin-locked");
+  if (!appStarted) {
+    appStarted = true;
+    initApp();
+  }
+}
+
+function initApp() {
+  build();
+  loadAll().then(() => {
     document.getElementById("loader").classList.add("hidden");
     setInterval(pollForUpdates, 4000);
   });
 }
 
-// Always show PIN gate on load
-// initApp() is called only after correct PIN entry
-
-
-// ── PIN GATE ─────────────────────────────────────────────────
-
-function pinPress(d) {
-  if (pinEntry.length >= 4) return;
-  pinEntry += d;
-  updateDots();
-  if (pinEntry.length === 4) setTimeout(checkPin, 120);
-}
-function pinDel() {
-  pinEntry = pinEntry.slice(0, -1);
-  updateDots();
-  document.getElementById("pin-error").classList.remove("show");
-}
-function updateDots() {
-  for (let i = 0; i < 4; i++) {
-    const d = document.getElementById("pd" + i);
-    d.classList.toggle("filled", i < pinEntry.length);
-    d.classList.remove("error");
+// Keyboard support: 0-9 enters digits, Backspace deletes
+document.addEventListener("keydown", (e) => {
+  if (document.getElementById("pin-gate").classList.contains("hidden")) return;
+  if (e.key >= "0" && e.key <= "9") {
+    e.preventDefault();
+    pinPress(e.key);
+  } else if (e.key === "Backspace") {
+    e.preventDefault();
+    pinDel();
   }
-}
-function checkPin() {
-  if (pinEntry === PIN) {
-    document.getElementById("pin-gate").classList.add("hidden");
-  } else {
-    for (let i = 0; i < 4; i++) document.getElementById("pd" + i).classList.add("error");
-    document.getElementById("pin-error").classList.add("show");
-    setTimeout(() => { pinEntry = ""; updateDots(); }, 800);
+});
+
+// Bootstrap: lock scroll, then either auto-unlock (if session remembers) or wait for PIN.
+document.body.classList.add("pin-locked");
+try {
+  if (sessionStorage.getItem(UNLOCK_KEY) === "1") {
+    unlockApp();
   }
-}
+} catch(e) {}
 </script>
 </body>
 </html>
