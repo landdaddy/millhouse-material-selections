@@ -18,6 +18,61 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); font-size: 14px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
 
+/* ── PIN GATE ── */
+.pin-gate {
+  position: fixed; inset: 0; background: var(--cream);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 9999; gap: 0;
+}
+.pin-gate.hidden { display: none; }
+.pin-wordmark {
+  font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 13px;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--ink);
+  margin-bottom: 3rem;
+}
+.pin-title {
+  font-family: 'EB Garamond', serif; font-size: 1.5rem; font-weight: 400;
+  color: var(--ink); margin-bottom: .35rem; text-align: center;
+}
+.pin-sub {
+  font-size: 12px; color: var(--muted); font-style: italic;
+  margin-bottom: 2rem; text-align: center;
+}
+.pin-dots {
+  display: flex; gap: 12px; margin-bottom: 2rem;
+}
+.pin-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  border: 1px solid var(--border-em); background: var(--cream);
+  transition: background .15s, border-color .15s;
+}
+.pin-dot.filled { background: var(--ink); border-color: var(--ink); }
+.pin-dot.error { background: #c0392b; border-color: #c0392b; }
+.pin-keypad {
+  display: grid; grid-template-columns: repeat(3, 64px); gap: 8px;
+}
+.pin-key {
+  font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 400;
+  width: 64px; height: 64px; border-radius: var(--radius-lg);
+  border: 1px solid var(--border); background: var(--cream);
+  cursor: pointer; color: var(--ink); transition: all .15s;
+  display: flex; align-items: center; justify-content: center;
+}
+.pin-key:hover { background: var(--surface); border-color: var(--border-em); }
+.pin-key:active { background: var(--ink); color: var(--cream); }
+.pin-key.del { font-size: 13px; color: var(--muted); }
+.pin-key.empty { border: none; background: transparent; cursor: default; pointer-events: none; }
+.pin-error {
+  font-size: 11px; color: #c0392b; font-style: italic;
+  margin-top: 1rem; opacity: 0; transition: opacity .2s;
+}
+.pin-error.show { opacity: 1; }
+.pin-divider {
+  width: 40px; height: 1px; background: var(--border);
+  margin: 2rem 0;
+}
+</style>
+
 .site-header { border-bottom: 1px solid var(--border); padding: 0 2.5rem; display: flex; align-items: center; justify-content: space-between; height: 56px; background: var(--cream); position: sticky; top: 0; z-index: 100; }
 .wordmark { font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 13px; letter-spacing: .2em; text-transform: uppercase; color: var(--ink); text-decoration: none; }
 .sync-status { font-size: 11px; color: var(--gold); font-style: italic; opacity: 0; transition: opacity .4s; }
@@ -105,6 +160,35 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 </style>
 </head>
 <body>
+
+<!-- PIN GATE -->
+<div class="pin-gate" id="pin-gate">
+  <div class="pin-wordmark">MILLHOUSE</div>
+  <div class="pin-title">Dillenburg Residence</div>
+  <div class="pin-sub">Enter your access code to continue.</div>
+  <div class="pin-dots" id="pin-dots">
+    <div class="pin-dot" id="pd0"></div>
+    <div class="pin-dot" id="pd1"></div>
+    <div class="pin-dot" id="pd2"></div>
+    <div class="pin-dot" id="pd3"></div>
+  </div>
+  <div class="pin-keypad">
+    <button class="pin-key" onclick="pinPress('1')">1</button>
+    <button class="pin-key" onclick="pinPress('2')">2</button>
+    <button class="pin-key" onclick="pinPress('3')">3</button>
+    <button class="pin-key" onclick="pinPress('4')">4</button>
+    <button class="pin-key" onclick="pinPress('5')">5</button>
+    <button class="pin-key" onclick="pinPress('6')">6</button>
+    <button class="pin-key" onclick="pinPress('7')">7</button>
+    <button class="pin-key" onclick="pinPress('8')">8</button>
+    <button class="pin-key" onclick="pinPress('9')">9</button>
+    <button class="pin-key empty"></button>
+    <button class="pin-key" onclick="pinPress('0')">0</button>
+    <button class="pin-key del" onclick="pinDel()">&#9003;</button>
+  </div>
+  <div class="pin-error" id="pin-error">Incorrect code — try again.</div>
+</div>
+
 
 <div class="loading-screen" id="loader">
   <div class="loading-wordmark">MILLHOUSE</div>
@@ -493,10 +577,94 @@ function doExport(){
   document.getElementById(id).addEventListener("input",scheduleSave);
 });
 
-build();
-loadAll().then(()=>{
-  document.getElementById("loader").classList.add("hidden");
-});
+// ── REAL-TIME SYNC ───────────────────────────────────────────
+let lastTs = 0;
+let isSaving = false;
+
+async function pollForUpdates(){
+  if(isSaving) return; // don't overwrite while user is typing
+  try {
+    const {data,error} = await sb.from("selections").select("data,updated_at").eq("id",PROJECT_ID).single();
+    if(data && data.data){
+      const parsed = JSON.parse(data.data);
+      const remoteTs = parsed.ts || 0;
+      if(remoteTs > lastTs){
+        lastTs = remoteTs;
+        applyData(parsed);
+        showSync("Updated");
+      }
+    }
+  } catch(e){}
+}
+
+// wrap scheduleSave to set isSaving flag
+const _scheduleSave = scheduleSave;
+function scheduleSave(){
+  isSaving = true;
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async ()=>{
+    await saveAll();
+    isSaving = false;
+  }, 800);
+}
+
+
+// ── PIN GATE ─────────────────────────────────────────────────
+const PIN = "4469";
+const PIN_KEY = "mh_pin_unlocked";
+let pinEntry = "";
+
+function pinPress(d){
+  if(pinEntry.length >= 4) return;
+  pinEntry += d;
+  updatePinDots();
+  if(pinEntry.length === 4) setTimeout(checkPin, 120);
+}
+
+function pinDel(){
+  pinEntry = pinEntry.slice(0,-1);
+  updatePinDots();
+  clearPinError();
+}
+
+function updatePinDots(){
+  for(let i=0;i<4;i++){
+    const dot = document.getElementById("pd"+i);
+    dot.classList.toggle("filled", i < pinEntry.length);
+    dot.classList.remove("error");
+  }
+}
+
+function checkPin(){
+  if(pinEntry === PIN){
+    
+    document.getElementById("pin-gate").classList.add("hidden");
+    initApp();
+  } else {
+    for(let i=0;i<4;i++) document.getElementById("pd"+i).classList.add("error");
+    document.getElementById("pin-error").classList.add("show");
+    setTimeout(()=>{
+      pinEntry="";
+      updatePinDots();
+    }, 700);
+  }
+}
+
+function clearPinError(){
+  document.getElementById("pin-error").classList.remove("show");
+}
+
+function initApp(){
+  build();
+  loadAll().then(()=>{
+    document.getElementById("loader").classList.add("hidden");
+    setInterval(pollForUpdates, 4000);
+  });
+}
+
+// Always show PIN gate on load
+// initApp() is called only after correct PIN entry
+
 </script>
 </body>
 </html>
