@@ -7,39 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-// ── PIN GATE ─────────────────────────────────────────────────
-const PIN = "4469";
-let pinEntry = "";
-
-function pinPress(d) {
-  if (pinEntry.length >= 4) return;
-  pinEntry += d;
-  updateDots();
-  if (pinEntry.length === 4) setTimeout(checkPin, 120);
-}
-function pinDel() {
-  pinEntry = pinEntry.slice(0, -1);
-  updateDots();
-  document.getElementById("pin-error").classList.remove("show");
-}
-function updateDots() {
-  for (let i = 0; i < 4; i++) {
-    const d = document.getElementById("pd" + i);
-    d.classList.toggle("filled", i < pinEntry.length);
-    d.classList.remove("error");
-  }
-}
-function checkPin() {
-  if (pinEntry === PIN) {
-    document.getElementById("pin-gate").classList.add("hidden");
-  } else {
-    for (let i = 0; i < 4; i++) document.getElementById("pd" + i).classList.add("error");
-    document.getElementById("pin-error").classList.add("show");
-    setTimeout(() => { pinEntry = ""; updateDots(); }, 800);
-  }
-}
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root {
   --cream: #fffaf2; --ink: #1c1a17; --muted: #7a7268;
@@ -687,53 +655,48 @@ function scheduleSave(){
 }
 
 
-// ── PIN GATE ─────────────────────────────────────────────────
+
+// ── PIN GATE ────────────────────────────────────────────────
 const PIN = "4469";
-const PIN_KEY = "mh_pin_unlocked";
 let pinEntry = "";
 
-function pinPress(d){
-  if(pinEntry.length >= 4) return;
+function pinPress(d) {
+  if (pinEntry.length >= 4) return;
   pinEntry += d;
-  updatePinDots();
-  if(pinEntry.length === 4) setTimeout(checkPin, 120);
-}
-
-function pinDel(){
-  pinEntry = pinEntry.slice(0,-1);
-  updatePinDots();
-  clearPinError();
-}
-
-function updatePinDots(){
-  for(let i=0;i<4;i++){
-    const dot = document.getElementById("pd"+i);
+  for (let i = 0; i < 4; i++) {
+    const dot = document.getElementById("pd" + i);
     dot.classList.toggle("filled", i < pinEntry.length);
     dot.classList.remove("error");
   }
-}
-
-function checkPin(){
-  if(pinEntry === PIN){
-    
-    document.getElementById("pin-gate").classList.add("hidden");
-    initApp();
-  } else {
-    for(let i=0;i<4;i++) document.getElementById("pd"+i).classList.add("error");
-    document.getElementById("pin-error").classList.add("show");
-    setTimeout(()=>{
-      pinEntry="";
-      updatePinDots();
-    }, 700);
+  if (pinEntry.length === 4) {
+    setTimeout(function() {
+      if (pinEntry === PIN) {
+        document.getElementById("pin-gate").classList.add("hidden");
+      } else {
+        for (let i = 0; i < 4; i++) document.getElementById("pd" + i).classList.add("error");
+        document.getElementById("pin-error").classList.add("show");
+        setTimeout(function() {
+          pinEntry = "";
+          for (let i = 0; i < 4; i++) {
+            document.getElementById("pd" + i).classList.remove("filled","error");
+          }
+          document.getElementById("pin-error").classList.remove("show");
+        }, 800);
+      }
+    }, 120);
   }
 }
 
-function clearPinError(){
+function pinDel() {
+  if (pinEntry.length === 0) return;
+  pinEntry = pinEntry.slice(0, -1);
+  for (let i = 0; i < 4; i++) {
+    document.getElementById("pd" + i).classList.toggle("filled", i < pinEntry.length);
+  }
   document.getElementById("pin-error").classList.remove("show");
 }
 
-function initApp(){
-  build();
+build();
   loadAll().then(()=>{
     document.getElementById("loader").classList.add("hidden");
     setInterval(pollForUpdates, 4000);
@@ -743,6 +706,36 @@ function initApp(){
 // Always show PIN gate on load
 // initApp() is called only after correct PIN entry
 
+
+// ── PIN GATE ─────────────────────────────────────────────────
+
+function pinPress(d) {
+  if (pinEntry.length >= 4) return;
+  pinEntry += d;
+  updateDots();
+  if (pinEntry.length === 4) setTimeout(checkPin, 120);
+}
+function pinDel() {
+  pinEntry = pinEntry.slice(0, -1);
+  updateDots();
+  document.getElementById("pin-error").classList.remove("show");
+}
+function updateDots() {
+  for (let i = 0; i < 4; i++) {
+    const d = document.getElementById("pd" + i);
+    d.classList.toggle("filled", i < pinEntry.length);
+    d.classList.remove("error");
+  }
+}
+function checkPin() {
+  if (pinEntry === PIN) {
+    document.getElementById("pin-gate").classList.add("hidden");
+  } else {
+    for (let i = 0; i < 4; i++) document.getElementById("pd" + i).classList.add("error");
+    document.getElementById("pin-error").classList.add("show");
+    setTimeout(() => { pinEntry = ""; updateDots(); }, 800);
+  }
+}
 </script>
 </body>
 </html>
