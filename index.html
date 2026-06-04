@@ -104,7 +104,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 .pin-dot.filled { background:var(--ink); border-color:var(--ink); }
 .pin-dot.error { background:#c0392b; border-color:#c0392b; }
 .pin-keypad { display:grid; grid-template-columns:repeat(3,64px); gap:8px; }
-.pin-key { font-family:'DM Sans',sans-serif; font-size:16px; width:64px; height:64px; border-radius:var(--radius-lg); border:1px solid var(--border); background:var(--cream); cursor:pointer; color:var(--ink); transition:all .15s; display:flex; align-items:center; justify-content:center; }
+.pin-key { font-family:'DM Sans',sans-serif; font-size:16px; width:64px; height:64px; border-radius:var(--radius-lg); border:1px solid var(--border); background:var(--cream); cursor:pointer; color:var(--ink); transition:background .08s, border-color .08s, color .08s; display:flex; align-items:center; justify-content:center; touch-action:manipulation; -webkit-tap-highlight-color:transparent; user-select:none; -webkit-user-select:none; }
 .pin-key:hover { background:var(--surface); border-color:var(--border-em); }
 .pin-key:active { background:var(--ink); color:var(--cream); }
 .pin-key.del { font-size:13px; color:var(--muted); }
