@@ -214,18 +214,18 @@ body.pin-locked { overflow: hidden; }
     <div class="pin-dot" id="pd3"></div>
   </div>
   <div class="pin-keypad">
-    <button class="pin-key" onclick="pinPress('1')">1</button>
-    <button class="pin-key" onclick="pinPress('2')">2</button>
-    <button class="pin-key" onclick="pinPress('3')">3</button>
-    <button class="pin-key" onclick="pinPress('4')">4</button>
-    <button class="pin-key" onclick="pinPress('5')">5</button>
-    <button class="pin-key" onclick="pinPress('6')">6</button>
-    <button class="pin-key" onclick="pinPress('7')">7</button>
-    <button class="pin-key" onclick="pinPress('8')">8</button>
-    <button class="pin-key" onclick="pinPress('9')">9</button>
-    <button class="pin-key empty"></button>
-    <button class="pin-key" onclick="pinPress('0')">0</button>
-    <button class="pin-key del" onclick="pinDel()">&#9003;</button>
+    <button type="button" class="pin-key" data-pin="1">1</button>
+    <button type="button" class="pin-key" data-pin="2">2</button>
+    <button type="button" class="pin-key" data-pin="3">3</button>
+    <button type="button" class="pin-key" data-pin="4">4</button>
+    <button type="button" class="pin-key" data-pin="5">5</button>
+    <button type="button" class="pin-key" data-pin="6">6</button>
+    <button type="button" class="pin-key" data-pin="7">7</button>
+    <button type="button" class="pin-key" data-pin="8">8</button>
+    <button type="button" class="pin-key" data-pin="9">9</button>
+    <button type="button" class="pin-key empty" tabindex="-1"></button>
+    <button type="button" class="pin-key" data-pin="0">0</button>
+    <button type="button" class="pin-key del" data-pin-del="1">&#9003;</button>
   </div>
   <div class="pin-error" id="pin-error">Incorrect code — try again.</div>
 </div>
@@ -674,8 +674,35 @@ function pinPress(d) {
   pinEntry += d;
   updateDots();
   document.getElementById("pin-error").classList.remove("show");
-  if (pinEntry.length === 4) setTimeout(checkPin, 120);
+  if (pinEntry.length === 4) setTimeout(checkPin, 60);
 }
+
+// Wire keypad buttons via pointerdown for instant response on iOS (no 300ms tap delay,
+// no waiting for the synthesized click event). Falls back to mousedown on browsers
+// without Pointer Events.
+(function wireKeypad() {
+  const keypad = document.querySelector(".pin-keypad");
+  if (!keypad) return;
+  const evtName = "onpointerdown" in window ? "pointerdown" : "mousedown";
+  keypad.addEventListener(evtName, function (e) {
+    const btn = e.target.closest(".pin-key");
+    if (!btn) return;
+    if (btn.dataset.pin) {
+      e.preventDefault();
+      pinPress(btn.dataset.pin);
+    } else if (btn.dataset.pinDel) {
+      e.preventDefault();
+      pinDel();
+    }
+  }, { passive: false });
+  // Also listen for click for keyboard/AT users who activate buttons via Enter/Space.
+  keypad.addEventListener("click", function (e) {
+    const btn = e.target.closest(".pin-key");
+    if (!btn || !(e.detail === 0)) return; // detail===0 means activated via keyboard
+    if (btn.dataset.pin) pinPress(btn.dataset.pin);
+    else if (btn.dataset.pinDel) pinDel();
+  });
+})();
 
 function pinDel() {
   if (pinLocked) return;
